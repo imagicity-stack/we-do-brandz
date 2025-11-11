@@ -1,0 +1,37 @@
+.contact-hero {
+  padding: 5rem 0 3rem;
+}
+
+.contact-hero-inner {
+  display: grid;
+  gap: 2.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  align-items: start;
+}
+
+.contact-hero h1 {
+  font-size: clamp(2.2rem, 4vw, 3.1rem);
+  margin-bottom: 1rem;
+}
+
+.contact-hero p {
+  max-width: 520px;
+  color: rgba(12, 27, 51, 0.72);
+  font-size: 1.05rem;
+  margin-bottom: 2rem;
+}
+
+.contact-details {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.contact-details h3 {
+  font-size: 1rem;
+  margin-bottom: 0.35rem;
+  color: var(--brand-secondary);
+}
+
+.contact-details p {
+  color: rgba(12, 27, 51, 0.7);
+}
