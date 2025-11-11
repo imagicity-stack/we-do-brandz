@@ -45,7 +45,7 @@ export const ContactForm = () => {
         </label>
         <label>
           Phone Number
-          <input name="phone" value={form.phone} onInput={handleChange} required placeholder="+91 98765 43210" />
+          <input name="phone" value={form.phone} onInput={handleChange} required placeholder="+91 91222 89578" />
         </label>
         <label>
           Company / Brand
