@@ -1,0 +1,82 @@
+.hero {
+  padding: 6rem 0 4rem;
+}
+
+.hero-inner {
+  display: grid;
+  gap: 3rem;
+  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.hero-copy h1 {
+  font-size: clamp(2.5rem, 4.5vw, 3.75rem);
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+
+.hero-copy p {
+  font-size: 1.1rem;
+  color: rgba(12, 27, 51, 0.72);
+  max-width: 540px;
+  margin-bottom: 1.75rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.hero-card {
+  background: linear-gradient(135deg, rgba(31, 75, 255, 0.92), rgba(12, 27, 51, 0.95));
+  color: #ffffff;
+  border-radius: 1.75rem;
+  padding: 2.5rem;
+  box-shadow: 0 30px 60px rgba(15, 22, 41, 0.35);
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.hero-highlight {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1.5rem;
+  border-radius: 1.25rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.hero-highlight-author {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 4.5rem 0 3rem;
+  }
+
+  .hero-card {
+    padding: 2rem;
+  }
+}

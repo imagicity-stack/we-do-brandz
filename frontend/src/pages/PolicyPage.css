@@ -1,0 +1,31 @@
+.policy-page {
+  padding: 5rem 0 3rem;
+}
+
+.policy-page h1 {
+  font-size: clamp(2.2rem, 4vw, 3.1rem);
+  margin-bottom: 1.5rem;
+}
+
+.policy-page h2 {
+  font-size: 1.4rem;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.policy-page p,
+.policy-page ul {
+  max-width: 760px;
+  color: rgba(12, 27, 51, 0.72);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.policy-page ul {
+  padding-left: 1.2rem;
+}
+
+.policy-page li {
+  list-style: disc;
+  margin-bottom: 0.5rem;
+}
