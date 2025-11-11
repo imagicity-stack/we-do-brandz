@@ -235,7 +235,7 @@ const ServiceDetail = () => {
                 />
                 <span>
                   I agree to the{' '}
-                  <a href="/terms-and-conditions" target="_blank" rel="noreferrer">
+                  <a href="https://www.wedobrandz.com/terms-and-conditions" target="_blank" rel="noreferrer">
                     terms and conditions
                   </a>
                   .
