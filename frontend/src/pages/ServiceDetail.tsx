@@ -22,8 +22,15 @@ const initialFormState: BookingFormState = {
   acceptedTerms: false
 };
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:4000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'https://brandz-back.onrender.com';
 const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID ?? 'rzp_live_RXcMT65q6e27Ut';
+
+type RazorpayOrderResponse = {
+  id: string;
+  amount: number;
+  currency: string;
+  key?: string;
+};
 
 const ServiceDetail = () => {
   const params = useParams<{ serviceSlug: string; subServiceSlug: string }>();
@@ -97,10 +104,14 @@ const ServiceDetail = () => {
         throw new Error('Unable to initiate payment. Please try again later.');
       }
 
-      const order = await response.json();
+      const order: RazorpayOrderResponse = await response.json();
+
+      if (!order?.id || !order?.amount || !order?.currency) {
+        throw new Error('Received an invalid order response. Please try again later.');
+      }
 
       openCheckout({
-        key: RAZORPAY_KEY_ID,
+        key: order.key ?? RAZORPAY_KEY_ID,
         amount: order.amount,
         currency: order.currency,
         name: 'We do Brandz',
