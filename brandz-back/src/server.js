@@ -2,6 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import Razorpay from 'razorpay';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 import { logNote } from './utils/notes.js';
 
@@ -10,6 +13,11 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || '').split(',').filter(Boolean);
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const distPath = path.resolve(__dirname, '../../frontend/dist');
+const indexHtmlPath = path.join(distPath, 'index.html');
 
 app.use(
   cors({
@@ -28,16 +36,29 @@ app.use(
 );
 app.use(express.json());
 
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET
-});
+const razorpayKeyId = process.env.RAZORPAY_KEY_ID;
+const razorpayKeySecret = process.env.RAZORPAY_KEY_SECRET;
+
+let razorpay = null;
+if (razorpayKeyId && razorpayKeySecret) {
+  razorpay = new Razorpay({
+    key_id: razorpayKeyId,
+    key_secret: razorpayKeySecret
+  });
+} else {
+  logNote('Razorpay credentials missing; create-order endpoint will return an error until configured.');
+}
 
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', service: 'brandz-back' });
 });
 
 app.post('/api/create-order', async (req, res) => {
+  if (!razorpay) {
+    res.status(500).json({ error: 'Razorpay is not configured.' });
+    return;
+  }
+
   const { amount, currency = 'INR', name, email, contactNumber, brand, message, serviceId, serviceName, categoryName } =
     req.body || {};
 
@@ -78,6 +99,28 @@ app.post('/api/create-order', async (req, res) => {
     res.status(500).json({ error: 'Unable to create Razorpay order.' });
   }
 });
+
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath, { index: false }));
+
+  app.get('*', (req, res, next) => {
+    if (req.method !== 'GET' || req.path.startsWith('/api') || req.path.includes('.')) {
+      next();
+      return;
+    }
+
+    if (!fs.existsSync(indexHtmlPath)) {
+      next();
+      return;
+    }
+
+    res.sendFile(indexHtmlPath, (error) => {
+      if (error) {
+        next(error);
+      }
+    });
+  });
+}
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
