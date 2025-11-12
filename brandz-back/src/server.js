@@ -87,18 +87,16 @@ app.post('/api/create-order', async (req, res) => {
   }
 });
 
-if (fs.existsSync(distPath)) {
-  app.use(express.static(distPath, { index: false }));
-}
+app.use(express.static(distPath, { index: false }));
 
 app.get('*', (req, res, next) => {
-  if (req.path.startsWith('/api')) {
+  if (req.path.startsWith('/api') || path.extname(req.path)) {
     next();
     return;
   }
 
   if (!fs.existsSync(indexHtmlPath)) {
-    next();
+    res.status(404).send('Frontend build not found. Run "npm run build" inside the frontend project.');
     return;
   }
 
