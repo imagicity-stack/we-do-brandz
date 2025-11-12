@@ -2,6 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import Razorpay from 'razorpay';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 import { logNote } from './utils/notes.js';
 
@@ -10,6 +13,10 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || '').split(',').filter(Boolean);
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const distPath = path.resolve(__dirname, '../../frontend/dist');
 
 app.use(
   cors({
@@ -78,6 +85,13 @@ app.post('/api/create-order', async (req, res) => {
     res.status(500).json({ error: 'Unable to create Razorpay order.' });
   }
 });
+
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
+}
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
