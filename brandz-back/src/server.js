@@ -17,6 +17,7 @@ const allowedOrigins = (process.env.ALLOWED_ORIGINS || '').split(',').filter(Boo
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const distPath = path.resolve(__dirname, '../../frontend/dist');
+const indexHtmlPath = path.join(distPath, 'index.html');
 
 app.use(
   cors({
@@ -87,11 +88,26 @@ app.post('/api/create-order', async (req, res) => {
 });
 
 if (fs.existsSync(distPath)) {
-  app.use(express.static(distPath));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(distPath, 'index.html'));
-  });
+  app.use(express.static(distPath, { index: false }));
 }
+
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    next();
+    return;
+  }
+
+  if (!fs.existsSync(indexHtmlPath)) {
+    next();
+    return;
+  }
+
+  res.sendFile(indexHtmlPath, (error) => {
+    if (error) {
+      next(error);
+    }
+  });
+});
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
