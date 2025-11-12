@@ -2,6 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import Razorpay from 'razorpay';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 import { logNote } from './utils/notes.js';
 
@@ -10,6 +13,11 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || '').split(',').filter(Boolean);
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const distPath = path.resolve(__dirname, '../../frontend/dist');
+const indexHtmlPath = path.join(distPath, 'index.html');
 
 app.use(
   cors({
@@ -77,6 +85,28 @@ app.post('/api/create-order', async (req, res) => {
     logNote('Failed to create order', { error: error instanceof Error ? error.message : 'unknown' });
     res.status(500).json({ error: 'Unable to create Razorpay order.' });
   }
+});
+
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath, { index: false }));
+}
+
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    next();
+    return;
+  }
+
+  if (!fs.existsSync(indexHtmlPath)) {
+    next();
+    return;
+  }
+
+  res.sendFile(indexHtmlPath, (error) => {
+    if (error) {
+      next(error);
+    }
+  });
 });
 
 app.listen(PORT, () => {
