@@ -123,6 +123,12 @@
   font-weight: 600;
 }
 
+.form-note {
+  color: rgba(12, 27, 51, 0.7);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
 .form-helper {
   color: rgba(12, 27, 51, 0.6);
   font-size: 0.9rem;

@@ -11,6 +11,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsAndConditions from './pages/TermsAndConditions';
 import RefundPolicy from './pages/RefundPolicy';
 import NotFound from './pages/NotFound';
+import ScrollToTopButton from './components/ScrollToTopButton';
 
 const App = () => (
   <div className="app">
@@ -28,6 +29,7 @@ const App = () => (
       <Route path="*" element={<NotFound />} />
     </Routes>
     <Footer />
+    <ScrollToTopButton />
   </div>
 );
 
