@@ -1,4 +1,4 @@
-import { FormEvent, useMemo, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { findSubService } from '../data/services';
 import { useRazorpay } from '../hooks/useRazorpay';
@@ -41,6 +41,7 @@ const ServiceDetail = () => {
   const [form, setForm] = useState<BookingFormState>(initialFormState);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [addVfx, setAddVfx] = useState(false);
 
   if (!match) {
     return (
@@ -61,6 +62,16 @@ const ServiceDetail = () => {
   }
 
   const { category, subService } = match;
+  const isReelsEditing = subService.slug === 'reels-editing';
+
+  useEffect(() => {
+    setAddVfx(false);
+  }, [subService.id]);
+
+  const totalAmountInINR = subService.priceInINR + (isReelsEditing && addVfx ? 400 : 0);
+  const paymentButtonLabel = isReelsEditing
+    ? `Pay ₹${totalAmountInINR.toLocaleString('en-IN')}`
+    : `Pay ${subService.priceLabel}`;
 
   const handleChange = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type, checked } = event.currentTarget as HTMLInputElement;
@@ -96,7 +107,7 @@ const ServiceDetail = () => {
           serviceId: subService.id,
           serviceName: subService.name,
           categoryName: category.name,
-          amount: subService.priceInINR * 100
+          amount: totalAmountInINR * 100
         })
       });
 
@@ -125,7 +136,8 @@ const ServiceDetail = () => {
         notes: {
           brand: form.brand,
           message: form.message,
-          serviceId: subService.id
+          serviceId: subService.id,
+          addVfx: isReelsEditing && addVfx ? 'yes' : 'no'
         },
         theme: {
           color: '#1f4bff'
@@ -226,6 +238,17 @@ const ServiceDetail = () => {
                   required
                 />
               </label>
+              {isReelsEditing && (
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    name="addVfx"
+                    checked={addVfx}
+                    onChange={(event) => setAddVfx(event.currentTarget.checked)}
+                  />
+                  <span>Add VFX (+₹400)</span>
+                </label>
+              )}
               <label className="checkbox">
                 <input
                   type="checkbox"
@@ -242,8 +265,10 @@ const ServiceDetail = () => {
                 </span>
               </label>
               {error && <p className="form-error">{error}</p>}
+              <p className="form-note">The agency will contact you for further details.</p>
+              <p className="form-note">The legal business name is imagicity.</p>
               <button className="primary-button" type="submit" disabled={isSubmitting || !isLoaded}>
-                {isSubmitting ? 'Launching checkout…' : `Pay ${subService.priceLabel}`}
+                {isSubmitting ? 'Launching checkout…' : paymentButtonLabel}
               </button>
               {!isLoaded && <p className="form-helper">Loading secure Razorpay checkout…</p>}
             </form>
