@@ -1,21 +1,25 @@
 import { Link } from 'react-router-dom';
+import { useLocalePath } from '../hooks/useLocalePath';
 import './ContactCTA.css';
 
-export const ContactCTA = () => (
-  <section className="section contact-cta">
-    <div className="main-container cta-inner">
-      <div>
-        <span className="tag">Let&apos;s build your next chapter</span>
-        <h2>Ready for a brand that looks sharp and performs even better?</h2>
-        <p className="section-intro">
-          Tell us about your goals and we&apos;ll recommend the ideal brand, digital, and content mix to make them happen.
-        </p>
+export const ContactCTA = () => {
+  const buildPath = useLocalePath();
+  return (
+    <section className="section contact-cta">
+      <div className="main-container contact-cta-inner">
+        <div>
+          <span className="tag">Ready to grow?</span>
+          <h2>Book a discovery call and see how we can help.</h2>
+          <p>
+            Share your growth goals, current challenges, and we&apos;ll map a roadmap tailored to your brand.
+          </p>
+        </div>
+        <Link to={buildPath('/contact')} className="primary-button">
+          Book a call
+        </Link>
       </div>
-      <Link to="/contact" className="primary-button">
-        Start a project
-      </Link>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 export default ContactCTA;
