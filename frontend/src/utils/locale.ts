@@ -7,11 +7,11 @@ export const isLocale = (value?: string | null): value is Locale => {
 };
 
 const AMERICA_TZ_PREFIX = 'America/';
-const INDIA_TIMEZONE = 'Asia/Kolkata';
+const INDIA_TIMEZONES = ['Asia/Kolkata', 'Asia/Calcutta'];
 
 const guessFromTimezone = () => {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone ?? '';
-  if (timezone === INDIA_TIMEZONE) {
+  if (INDIA_TIMEZONES.includes(timezone)) {
     return 'in';
   }
   if (timezone.startsWith(AMERICA_TZ_PREFIX)) {
