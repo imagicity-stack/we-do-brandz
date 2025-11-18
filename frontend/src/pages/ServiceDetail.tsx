@@ -1,7 +1,10 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useLocale } from '../context/LocaleContext';
 import { findSubService } from '../data/services';
+import { useLocalePath } from '../hooks/useLocalePath';
 import { useRazorpay } from '../hooks/useRazorpay';
+import { formatCurrency, localizePriceLabel } from '../utils/currency';
 import './ServiceDetail.css';
 
 type BookingFormState = {
@@ -32,7 +35,11 @@ type RazorpayOrderResponse = {
   key?: string;
 };
 
+const REELS_VFX_ADD_ON_INR = 400;
+
 const ServiceDetail = () => {
+  const locale = useLocale();
+  const buildPath = useLocalePath();
   const params = useParams<{ serviceSlug: string; subServiceSlug: string }>();
   const navigate = useNavigate();
   const { serviceSlug = '', subServiceSlug = '' } = params;
@@ -51,7 +58,7 @@ const ServiceDetail = () => {
             <div className="card">
               <h1>Service not found</h1>
               <p>The service you are looking for is unavailable or has been moved.</p>
-              <button className="primary-button" onClick={() => navigate('/services')}>
+              <button className="primary-button" onClick={() => navigate(buildPath('/services'))}>
                 Back to services
               </button>
             </div>
@@ -63,15 +70,17 @@ const ServiceDetail = () => {
 
   const { category, subService } = match;
   const isReelsEditing = subService.slug === 'reels-editing';
+  const localizedPriceLabel = localizePriceLabel(locale, subService.priceLabel);
+  const localizedPriceNote = subService.priceNote ? localizePriceLabel(locale, subService.priceNote) : null;
 
   useEffect(() => {
     setAddVfx(false);
   }, [subService.id]);
 
-  const totalAmountInINR = subService.priceInINR + (isReelsEditing && addVfx ? 400 : 0);
-  const paymentButtonLabel = isReelsEditing
-    ? `Pay ₹${totalAmountInINR.toLocaleString('en-IN')}`
-    : `Pay ${subService.priceLabel}`;
+  const totalAmountInINR = subService.priceInINR + (isReelsEditing && addVfx ? REELS_VFX_ADD_ON_INR : 0);
+  const totalAmountLabel = formatCurrency(locale, totalAmountInINR);
+  const paymentButtonLabel = isReelsEditing ? `Pay ${totalAmountLabel}` : `Pay ${localizedPriceLabel}`;
+  const addOnLabel = formatCurrency(locale, REELS_VFX_ADD_ON_INR);
 
   const handleChange = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type, checked } = event.currentTarget as HTMLInputElement;
@@ -126,7 +135,7 @@ const ServiceDetail = () => {
         amount: order.amount,
         currency: order.currency,
         name: 'We do Brandz',
-        description: `${category.name} · ${subService.name}`,
+        description: subService.name,
         order_id: order.id,
         prefill: {
           name: form.name,
@@ -160,7 +169,7 @@ const ServiceDetail = () => {
           <div className="detail-meta">
             <div>
               <span className="meta-label">Investment</span>
-              <span className="meta-value">{subService.priceLabel}</span>
+              <span className="meta-value">{localizedPriceLabel}</span>
             </div>
             <div>
               <span className="meta-label">Timeline</span>
@@ -178,7 +187,7 @@ const ServiceDetail = () => {
                 <li key={item}>{item}</li>
               ))}
             </ul>
-            {subService.priceNote && <p className="detail-note">{subService.priceNote}</p>}
+            {localizedPriceNote && <p className="detail-note">{localizedPriceNote}</p>}
           </div>
           <div className="card detail-form-card">
             <h2>Book this service</h2>
@@ -246,7 +255,7 @@ const ServiceDetail = () => {
                     checked={addVfx}
                     onChange={(event) => setAddVfx(event.currentTarget.checked)}
                   />
-                  <span>Add VFX (+₹400)</span>
+                  <span>Add VFX (+{addOnLabel})</span>
                 </label>
               )}
               <label className="checkbox">
@@ -258,19 +267,20 @@ const ServiceDetail = () => {
                 />
                 <span>
                   I agree to the{' '}
-                  <a href="https://www.wedobrandz.com/terms-and-conditions" target="_blank" rel="noreferrer">
+                  <a href={buildPath('/terms-and-conditions')} target="_blank" rel="noreferrer">
                     terms and conditions
+                  </a>{' '}
+                  and{' '}
+                  <a href={buildPath('/privacy-policy')} target="_blank" rel="noreferrer">
+                    privacy policy
                   </a>
                   .
                 </span>
               </label>
               {error && <p className="form-error">{error}</p>}
-              <p className="form-note">The agency will contact you for further details.</p>
-              <p className="form-note">The legal business name is imagicity.</p>
-              <button className="primary-button" type="submit" disabled={isSubmitting || !isLoaded}>
-                {isSubmitting ? 'Launching checkout…' : paymentButtonLabel}
+              <button className="primary-button" type="submit" disabled={!isLoaded || isSubmitting}>
+                {isSubmitting ? 'Processing…' : paymentButtonLabel}
               </button>
-              {!isLoaded && <p className="form-helper">Loading secure Razorpay checkout…</p>}
             </form>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import { useLocalePath } from '../hooks/useLocalePath';
 import './Header.css';
 
 const menuItems = [
@@ -11,6 +12,7 @@ const menuItems = [
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const buildPath = useLocalePath();
 
   const toggleMenu = () => setIsOpen((prev) => !prev);
   const closeMenu = () => setIsOpen(false);
@@ -18,7 +20,7 @@ export const Header = () => {
   return (
     <header className="header">
       <div className="main-container header-inner">
-        <Link to="/" className="logo" onClick={closeMenu}>
+        <Link to={buildPath('/')} className="logo" onClick={closeMenu}>
           <span className="logo-mark">We do</span>
           <span className="logo-accent">Brandz</span>
         </Link>
@@ -26,7 +28,7 @@ export const Header = () => {
           {menuItems.map((item) => (
             <NavLink
               key={item.path}
-              to={item.path}
+              to={buildPath(item.path)}
               className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
               onClick={closeMenu}
             >
