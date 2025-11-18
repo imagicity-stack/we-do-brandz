@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom';
+import { useLocale } from '../context/LocaleContext';
 import type { ServiceCategory, SubService } from '../data/services';
+import { useLocalePath } from '../hooks/useLocalePath';
+import { localizePriceLabel } from '../utils/currency';
 import './SubServiceCard.css';
 
 interface Props {
@@ -7,29 +10,35 @@ interface Props {
   service: SubService;
 }
 
-export const SubServiceCard = ({ category, service }: Props) => (
-  <div className="subservice-card">
-    <div>
-      <span className="tag">{category.name}</span>
-      <h3>{service.name}</h3>
-      <p>{service.description}</p>
-      <ul>
-        {service.deliverables.map((item) => (
-          <li key={item}>{item}</li>
-        ))}
-      </ul>
-    </div>
-    <div className="subservice-meta">
-      <div className="price-block">
-        <span className="price">{service.priceLabel}</span>
-        <span className="timeline">{service.deliveryTimeline}</span>
-        {service.priceNote && <small>{service.priceNote}</small>}
+export const SubServiceCard = ({ category, service }: Props) => {
+  const locale = useLocale();
+  const buildPath = useLocalePath();
+  const localizedPrice = localizePriceLabel(locale, service.priceLabel);
+
+  return (
+    <div className="subservice-card">
+      <div>
+        <span className="tag">{category.name}</span>
+        <h3>{service.name}</h3>
+        <p>{service.description}</p>
+        <ul>
+          {service.deliverables.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
       </div>
-      <Link to={`/services/${category.slug}/${service.slug}`} className="primary-button">
-        Book now
-      </Link>
+      <div className="subservice-meta">
+        <div className="price-block">
+          <span className="price">{localizedPrice}</span>
+          <span className="timeline">{service.deliveryTimeline}</span>
+          {service.priceNote && <small>{localizePriceLabel(locale, service.priceNote)}</small>}
+        </div>
+        <Link to={buildPath(`/services/${category.slug}/${service.slug}`)} className="primary-button">
+          Book now
+        </Link>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default SubServiceCard;
