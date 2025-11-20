@@ -2,10 +2,11 @@ import type { Locale } from './locale';
 
 const USD_EXCHANGE_RATE = 83;
 const INR_FORMATTER = new Intl.NumberFormat('en-IN');
-const USD_FORMATTER = new Intl.NumberFormat('en-US');
+const USD_FORMATTER = new Intl.NumberFormat('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 
 const convertInrToApproxUsd = (amountInINR: number) => {
-  return Math.max(1, Math.round(amountInINR / USD_EXCHANGE_RATE));
+  const approxUSD = amountInINR / USD_EXCHANGE_RATE;
+  return Math.max(1, Math.round(approxUSD * 100) / 100);
 };
 
 export const formatCurrency = (locale: Locale, amountInINR: number) => {
@@ -35,5 +36,10 @@ export const getCheckoutAmount = (locale: Locale, amountInINR: number) => {
     return { amount: amountInINR * 100, currency: 'INR' as const };
   }
   const approxUSD = convertInrToApproxUsd(amountInINR);
-  return { amount: approxUSD * 100, currency: 'USD' as const };
+  return {
+    amount: Math.round(approxUSD * 100),
+    currency: 'USD' as const,
+    displayAmount: Number(approxUSD.toFixed(2)),
+    displayCurrency: 'USD' as const
+  };
 };

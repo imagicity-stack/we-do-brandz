@@ -81,7 +81,12 @@ const ServiceDetail = () => {
   const totalAmountLabel = formatCurrency(locale, totalAmountInINR);
   const paymentButtonLabel = isReelsEditing ? `Pay ${totalAmountLabel}` : `Pay ${localizedPriceLabel}`;
   const addOnLabel = formatCurrency(locale, REELS_VFX_ADD_ON_INR);
-  const { amount: checkoutAmount, currency: checkoutCurrency } = getCheckoutAmount(locale, totalAmountInINR);
+  const {
+    amount: checkoutAmount,
+    currency: checkoutCurrency,
+    displayAmount: checkoutDisplayAmount,
+    displayCurrency: checkoutDisplayCurrency
+  } = getCheckoutAmount(locale, totalAmountInINR);
 
   const handleChange = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type, checked } = event.currentTarget as HTMLInputElement;
@@ -132,6 +137,14 @@ const ServiceDetail = () => {
         throw new Error('Received an invalid order response. Please try again later.');
       }
 
+      const displayOptions =
+        checkoutDisplayCurrency && checkoutDisplayAmount
+          ? {
+              display_currency: checkoutDisplayCurrency,
+              display_amount: checkoutDisplayAmount
+            }
+          : {};
+
       openCheckout({
         key: order.key ?? RAZORPAY_KEY_ID,
         amount: order.amount,
@@ -139,6 +152,7 @@ const ServiceDetail = () => {
         name: 'We do Brandz',
         description: subService.name,
         order_id: order.id,
+        ...displayOptions,
         prefill: {
           name: form.name,
           email: form.email,
