@@ -2,8 +2,11 @@ import { useMemo } from 'react';
 import { serviceCategories } from '../data/services';
 import SubServiceCard from '../components/SubServiceCard';
 import './Services.css';
+import { useMetaPageEvents } from '../hooks/useMetaPageEvents';
 
 const Services = () => {
+  useMetaPageEvents('Services', { params: { content_category: 'Services Overview' } });
+
   const categoryAnchors = useMemo(
     () =>
       serviceCategories.map((category) => ({

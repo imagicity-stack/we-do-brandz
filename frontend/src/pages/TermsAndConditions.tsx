@@ -1,8 +1,12 @@
 import './PolicyPage.css';
+import { useMetaPageEvents } from '../hooks/useMetaPageEvents';
 
-const TermsAndConditions = () => (
-  <main className="policy-page">
-    <div className="main-container">
+const TermsAndConditions = () => {
+  useMetaPageEvents('Terms and Conditions', { params: { content_category: 'Policy' } });
+
+  return (
+    <main className="policy-page">
+      <div className="main-container">
       <h1>Terms and Conditions</h1>
       <p>Effective Date: November 2025</p>
       <p>Website: www.wedobrandz.com</p>
@@ -74,6 +78,7 @@ const TermsAndConditions = () => (
       <p>Website: www.wedobrandz.com</p>
     </div>
   </main>
-);
+  );
+};
 
 export default TermsAndConditions;
