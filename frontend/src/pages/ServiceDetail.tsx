@@ -99,6 +99,21 @@ const ServiceDetail = () => {
   const actionButtonLabel = isUS ? 'Connect now' : paymentButtonLabel;
   const isActionDisabled = isSubmitting || (isIndia && !isLoaded);
   const showEmiNote = isIndia && subService.priceInINR > 1000;
+  const metaValue = locale === 'in' ? totalAmountInINR : checkoutDisplayAmount ?? totalAmountInINR;
+  const metaCurrency = locale === 'in' ? 'INR' : 'USD';
+
+  useEffect(() => {
+    setAddVfx(false);
+  }, [subService.id]);
+
+  useEffect(() => {
+    trackMetaEvent('ViewContent', {
+      content_name: subService.name,
+      content_category: category.name,
+      value: metaValue,
+      currency: metaCurrency
+    });
+  }, [category.name, metaCurrency, metaValue, subService.name]);
 
   useEffect(() => {
     setAddVfx(false);
