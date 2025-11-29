@@ -11,6 +11,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsAndConditions from './pages/TermsAndConditions';
 import RefundPolicy from './pages/RefundPolicy';
 import NotFound from './pages/NotFound';
+import LocationPrompt from './components/LocationPrompt';
 import ScrollToTopButton from './components/ScrollToTopButton';
 import { LocaleProvider } from './context/LocaleContext';
 import { detectLocale, isLocale } from './utils/locale';
@@ -42,6 +43,7 @@ const LocaleShell = () => {
   return (
     <LocaleProvider value={localeParam}>
       <div className="app">
+        <LocationPrompt />
         <Header />
         <Outlet />
         <Footer />

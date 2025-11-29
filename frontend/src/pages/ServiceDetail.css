@@ -134,6 +134,11 @@
   font-size: 0.9rem;
 }
 
+.form-success {
+  color: var(--brand-primary);
+  font-weight: 600;
+}
+
 @media (max-width: 600px) {
   .detail-hero {
     padding: 4rem 0 2.5rem;

@@ -44,9 +44,12 @@ const ServiceDetail = () => {
   const navigate = useNavigate();
   const { serviceSlug = '', subServiceSlug = '' } = params;
   const match = useMemo(() => findSubService(serviceSlug, subServiceSlug), [serviceSlug, subServiceSlug]);
-  const { openCheckout, isLoaded } = useRazorpay();
+  const isIndia = locale === 'in';
+  const isUS = locale === 'us';
+  const { openCheckout, isLoaded } = useRazorpay(isIndia);
   const [form, setForm] = useState<BookingFormState>(initialFormState);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [addVfx, setAddVfx] = useState(false);
 
@@ -80,6 +83,7 @@ const ServiceDetail = () => {
   const totalAmountInINR = subService.priceInINR + (isReelsEditing && addVfx ? REELS_VFX_ADD_ON_INR : 0);
   const totalAmountLabel = formatCurrency(locale, totalAmountInINR);
   const paymentButtonLabel = isReelsEditing ? `Pay ${totalAmountLabel}` : `Pay ${localizedPriceLabel}`;
+  const actionButtonLabel = isUS ? 'Connect now' : paymentButtonLabel;
   const addOnLabel = formatCurrency(locale, REELS_VFX_ADD_ON_INR);
   const {
     amount: checkoutAmount,
@@ -87,6 +91,8 @@ const ServiceDetail = () => {
     displayAmount: checkoutDisplayAmount,
     displayCurrency: checkoutDisplayCurrency
   } = getCheckoutAmount(locale, totalAmountInINR);
+  const isActionDisabled = isSubmitting || (isIndia && !isLoaded);
+  const showEmiNote = isIndia && subService.priceInINR > 1000;
 
   const handleChange = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type, checked } = event.currentTarget as HTMLInputElement;
@@ -99,6 +105,7 @@ const ServiceDetail = () => {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
+    setSuccess(null);
 
     if (!form.acceptedTerms) {
       setError('Please accept the terms and conditions to continue.');
@@ -106,6 +113,13 @@ const ServiceDetail = () => {
     }
 
     setIsSubmitting(true);
+
+    if (isUS) {
+      setSuccess('Thanks! Our team will connect with you shortly to complete your booking.');
+      setForm(initialFormState);
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       const response = await fetch(`${API_BASE_URL}/api/create-order`, {
@@ -207,7 +221,11 @@ const ServiceDetail = () => {
           </div>
           <div className="card detail-form-card">
             <h2>Book this service</h2>
-            <p>Fill in your details and continue to secure payment via Razorpay checkout.</p>
+            <p>
+              {isIndia
+                ? 'Fill in your details and continue to secure payment via Razorpay checkout.'
+                : 'Share your details and we will connect with you to finalize payment and onboarding.'}
+            </p>
             <form className="booking-form" onSubmit={handleSubmit}>
               <div className="form-grid">
                 <label>
@@ -294,9 +312,11 @@ const ServiceDetail = () => {
                 </span>
               </label>
               {error && <p className="form-error">{error}</p>}
-              <button className="primary-button" type="submit" disabled={!isLoaded || isSubmitting}>
-                {isSubmitting ? 'Processing…' : paymentButtonLabel}
+              {showEmiNote && <p className="form-note">EMI options available.</p>}
+              <button className="primary-button" type="submit" disabled={isActionDisabled}>
+                {isSubmitting ? 'Processing…' : actionButtonLabel}
               </button>
+              {success && <p className="form-success">{success}</p>}
             </form>
           </div>
         </div>
