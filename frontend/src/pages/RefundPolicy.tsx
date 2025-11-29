@@ -1,8 +1,12 @@
 import './PolicyPage.css';
+import { useMetaPageEvents } from '../hooks/useMetaPageEvents';
 
-const RefundPolicy = () => (
-  <main className="policy-page">
-    <div className="main-container">
+const RefundPolicy = () => {
+  useMetaPageEvents('Return & Refund Policy', { params: { content_category: 'Policy' } });
+
+  return (
+    <main className="policy-page">
+      <div className="main-container">
       <h1>Return & Refund Policy</h1>
       <p>Effective Date: November 2025</p>
       <p>Website: www.wedobrandz.com</p>
@@ -65,6 +69,7 @@ const RefundPolicy = () => (
       <p>Website: www.wedobrandz.com</p>
     </div>
   </main>
-);
+  );
+};
 
 export default RefundPolicy;

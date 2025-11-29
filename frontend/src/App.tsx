@@ -1,4 +1,5 @@
-import { Navigate, Outlet, Route, Routes, useParams } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { Navigate, Outlet, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -16,6 +17,23 @@ import ScrollToTopButton from './components/ScrollToTopButton';
 import { LocaleProvider } from './context/LocaleContext';
 import { detectLocale, isLocale } from './utils/locale';
 import { useLocalePath } from './hooks/useLocalePath';
+import { trackMetaEvent } from './utils/metaPixel';
+
+const MetaPixelTracker = () => {
+  const location = useLocation();
+  const lastTrackedPath = useRef<string>();
+
+  useEffect(() => {
+    if (lastTrackedPath.current === location.pathname) {
+      return;
+    }
+
+    lastTrackedPath.current = location.pathname;
+    trackMetaEvent('PageView', { content_name: location.pathname });
+  }, [location.pathname]);
+
+  return null;
+};
 
 const CountryRedirect = () => {
   const locale = detectLocale();
@@ -43,6 +61,7 @@ const LocaleShell = () => {
   return (
     <LocaleProvider value={localeParam}>
       <div className="app">
+        <MetaPixelTracker />
         <LocationPrompt />
         <Header />
         <Outlet />
