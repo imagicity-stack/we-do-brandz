@@ -48,10 +48,20 @@ function createEmailContent(payload) {
 }
 
 export default async function handler(req, res) {
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    return res.status(200).end();
+  }
+
   if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
+    res.setHeader('Allow', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
+
+  res.setHeader('Access-Control-Allow-Origin', '*');
 
   let payload;
 
