@@ -5,6 +5,7 @@ import { findSubService } from '../data/services';
 import { useLocalePath } from '../hooks/useLocalePath';
 import { useRazorpay } from '../hooks/useRazorpay';
 import { formatCurrency, getCheckoutAmount, localizePriceLabel } from '../utils/currency';
+import { trackMetaEvent } from '../utils/metaPixel';
 import './ServiceDetail.css';
 
 type BookingFormState = {
@@ -75,11 +76,6 @@ const ServiceDetail = () => {
   const isReelsEditing = subService.slug === 'reels-editing';
   const localizedPriceLabel = localizePriceLabel(locale, subService.priceLabel);
   const localizedPriceNote = subService.priceNote ? localizePriceLabel(locale, subService.priceNote) : null;
-
-  useEffect(() => {
-    setAddVfx(false);
-  }, [subService.id]);
-
   const totalAmountInINR = subService.priceInINR + (isReelsEditing && addVfx ? REELS_VFX_ADD_ON_INR : 0);
   const totalAmountLabel = formatCurrency(locale, totalAmountInINR);
   const paymentButtonLabel = isReelsEditing ? `Pay ${totalAmountLabel}` : `Pay ${localizedPriceLabel}`;
@@ -93,6 +89,21 @@ const ServiceDetail = () => {
   } = getCheckoutAmount(locale, totalAmountInINR);
   const isActionDisabled = isSubmitting || (isIndia && !isLoaded);
   const showEmiNote = isIndia && subService.priceInINR > 1000;
+  const metaValue = locale === 'in' ? totalAmountInINR : checkoutDisplayAmount ?? totalAmountInINR;
+  const metaCurrency = locale === 'in' ? 'INR' : 'USD';
+
+  useEffect(() => {
+    setAddVfx(false);
+  }, [subService.id]);
+
+  useEffect(() => {
+    trackMetaEvent('ViewContent', {
+      content_name: subService.name,
+      content_category: category.name,
+      value: metaValue,
+      currency: metaCurrency
+    });
+  }, [category.name, metaCurrency, metaValue, subService.name]);
 
   const handleChange = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type, checked } = event.currentTarget as HTMLInputElement;
@@ -147,8 +158,18 @@ const ServiceDetail = () => {
 
     try {
       await sendEmailSubmission();
+      trackMetaEvent('Lead', {
+        content_name: subService.name,
+        content_category: category.name,
+        value: metaValue,
+        currency: metaCurrency
+      });
 
       if (isUS) {
+        trackMetaEvent('Contact', {
+          content_name: subService.name,
+          content_category: category.name
+        });
         setSuccess('Thanks! Our team will connect with you shortly to complete your booking.');
         setForm(initialFormState);
         return;
@@ -190,6 +211,13 @@ const ServiceDetail = () => {
               display_amount: checkoutDisplayAmount
             }
           : {};
+
+      trackMetaEvent('InitiateCheckout', {
+        content_name: subService.name,
+        content_category: category.name,
+        value: metaValue,
+        currency: metaCurrency
+      });
 
       openCheckout({
         key: order.key ?? RAZORPAY_KEY_ID,
