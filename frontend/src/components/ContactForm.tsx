@@ -1,5 +1,6 @@
 import { FormEvent, useState } from 'react';
 import './ContactForm.css';
+import { trackMetaEvent } from '../utils/metaPixel';
 
 interface FormState {
   name: string;
@@ -50,6 +51,8 @@ export const ContactForm = () => {
 
       setSubmitted(true);
       setForm(initialState);
+      trackMetaEvent('Lead');
+      trackMetaEvent('Contact');
     } catch (submissionError) {
       setError(
         submissionError instanceof Error
