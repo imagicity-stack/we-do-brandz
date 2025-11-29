@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { faqs } from '../data/faqs';
 import './FAQ.css';
+import { useMetaPageEvents } from '../hooks/useMetaPageEvents';
 
 const FAQ = () => {
+  useMetaPageEvents('FAQ', { params: { content_category: 'Frequently Asked Questions' } });
+
   const [openIndex, setOpenIndex] = useState(0);
 
   return (

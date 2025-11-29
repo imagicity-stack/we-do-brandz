@@ -29,8 +29,7 @@ const MetaPixelTracker = () => {
     }
 
     lastTrackedPath.current = location.pathname;
-    trackMetaEvent('PageView');
-    trackMetaEvent('ViewContent', { content_name: location.pathname });
+    trackMetaEvent('PageView', { content_name: location.pathname });
   }, [location.pathname]);
 
   return null;

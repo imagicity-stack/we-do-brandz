@@ -5,6 +5,7 @@ import { findSubService } from '../data/services';
 import { useLocalePath } from '../hooks/useLocalePath';
 import { useRazorpay } from '../hooks/useRazorpay';
 import { formatCurrency, getCheckoutAmount, localizePriceLabel } from '../utils/currency';
+import { useMetaPageEvents } from '../hooks/useMetaPageEvents';
 import { trackMetaEvent } from '../utils/metaPixel';
 import './ServiceDetail.css';
 
@@ -53,6 +54,25 @@ const ServiceDetail = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [addVfx, setAddVfx] = useState(false);
+  const isReelsEditing = match?.subService.slug === 'reels-editing';
+  const totalAmountInINR = (match?.subService.priceInINR ?? 0) + (isReelsEditing && addVfx ? REELS_VFX_ADD_ON_INR : 0);
+  const totalAmountLabel = formatCurrency(locale, totalAmountInINR);
+  const addOnLabel = formatCurrency(locale, REELS_VFX_ADD_ON_INR);
+  const {
+    amount: checkoutAmount,
+    currency: checkoutCurrency,
+    displayAmount: checkoutDisplayAmount,
+    displayCurrency: checkoutDisplayCurrency
+  } = getCheckoutAmount(locale, totalAmountInINR);
+  const metaValue = locale === 'in' ? totalAmountInINR : checkoutDisplayAmount ?? totalAmountInINR;
+  const metaCurrency = locale === 'in' ? 'INR' : 'USD';
+
+  useMetaPageEvents(match?.subService.name ?? 'Service detail', {
+    params: {
+      content_category: match?.category.name ?? 'Service detail',
+      ...(match ? { value: metaValue, currency: metaCurrency } : {})
+    }
+  });
 
   if (!match) {
     return (
@@ -73,20 +93,10 @@ const ServiceDetail = () => {
   }
 
   const { category, subService } = match;
-  const isReelsEditing = subService.slug === 'reels-editing';
   const localizedPriceLabel = localizePriceLabel(locale, subService.priceLabel);
   const localizedPriceNote = subService.priceNote ? localizePriceLabel(locale, subService.priceNote) : null;
-  const totalAmountInINR = subService.priceInINR + (isReelsEditing && addVfx ? REELS_VFX_ADD_ON_INR : 0);
-  const totalAmountLabel = formatCurrency(locale, totalAmountInINR);
   const paymentButtonLabel = isReelsEditing ? `Pay ${totalAmountLabel}` : `Pay ${localizedPriceLabel}`;
   const actionButtonLabel = isUS ? 'Connect now' : paymentButtonLabel;
-  const addOnLabel = formatCurrency(locale, REELS_VFX_ADD_ON_INR);
-  const {
-    amount: checkoutAmount,
-    currency: checkoutCurrency,
-    displayAmount: checkoutDisplayAmount,
-    displayCurrency: checkoutDisplayCurrency
-  } = getCheckoutAmount(locale, totalAmountInINR);
   const isActionDisabled = isSubmitting || (isIndia && !isLoaded);
   const showEmiNote = isIndia && subService.priceInINR > 1000;
   const metaValue = locale === 'in' ? totalAmountInINR : checkoutDisplayAmount ?? totalAmountInINR;
@@ -104,6 +114,10 @@ const ServiceDetail = () => {
       currency: metaCurrency
     });
   }, [category.name, metaCurrency, metaValue, subService.name]);
+
+  useEffect(() => {
+    setAddVfx(false);
+  }, [subService.id]);
 
   const handleChange = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type, checked } = event.currentTarget as HTMLInputElement;
