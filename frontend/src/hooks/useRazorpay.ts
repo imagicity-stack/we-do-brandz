@@ -8,11 +8,11 @@ declare global {
 
 const RAZORPAY_SCRIPT = 'https://checkout.razorpay.com/v1/checkout.js';
 
-export const useRazorpay = () => {
+export const useRazorpay = (enabled = true) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    if (typeof window === 'undefined') {
+    if (!enabled || typeof window === 'undefined') {
       return;
     }
     const existingScript = document.querySelector(`script[src="${RAZORPAY_SCRIPT}"]`);
@@ -31,18 +31,18 @@ export const useRazorpay = () => {
     script.onload = () => setIsLoaded(true);
     script.onerror = () => setIsLoaded(false);
     document.body.appendChild(script);
-  }, []);
+  }, [enabled]);
 
   const openCheckout = useCallback(
     (options: Record<string, unknown>) => {
-      if (!isLoaded || typeof window === 'undefined' || !window.Razorpay) {
+      if (!enabled || !isLoaded || typeof window === 'undefined' || !window.Razorpay) {
         throw new Error('Razorpay checkout script is not ready yet.');
       }
       const checkout = new window.Razorpay(options);
       checkout.open();
     },
-    [isLoaded]
+    [enabled, isLoaded]
   );
 
-  return { isLoaded, openCheckout };
+  return { isLoaded: enabled ? isLoaded : false, openCheckout };
 };
