@@ -28,6 +28,35 @@ function toHtmlList(payload) {
   return `<div><h2 style="margin:0 0 12px 0;">New submission details</h2><ul style="padding:0; margin:0; list-style:none;">${listItems}</ul></div>`;
 }
 
+function buildAmount(payload) {
+  if (payload.totalAmountLabel) return payload.totalAmountLabel;
+  if (payload.checkoutDisplayAmount && payload.checkoutDisplayCurrency)
+    return `${payload.checkoutDisplayAmount} ${payload.checkoutDisplayCurrency}`;
+  if (payload.checkoutAmount && payload.checkoutCurrency) return `${payload.checkoutAmount} ${payload.checkoutCurrency}`;
+  return payload.amount ?? payload.totalAmount ?? undefined;
+}
+
+function buildMessagePayload(formType, payload) {
+  if (formType === 'service-booking') {
+    const filtered = {
+      formType,
+      name: payload.name,
+      contactNumber: payload.contactNumber,
+      email: payload.email,
+      brand: payload.brand,
+      message: payload.message,
+      category: payload.categoryName ?? payload.category,
+      subCategory: payload.serviceName ?? payload.subServiceName ?? payload.subServiceSlug,
+      amount: buildAmount(payload)
+    };
+
+    return Object.fromEntries(Object.entries(filtered).filter(([, value]) => value !== undefined && value !== null));
+  }
+
+  const { email, ...rest } = payload;
+  return { formType, email, ...rest };
+}
+
 async function parseJsonBody(req) {
   if (req.body && typeof req.body === 'object') {
     return req.body;
@@ -70,8 +99,8 @@ export default async function handler(req, res) {
     return res.status(400).json({ success: false, error: 'Request body is required' });
   }
 
-  const { formType = 'form', email, ...rest } = payload;
-  const messagePayload = { formType, email, ...rest };
+  const { formType = 'form', email } = payload;
+  const messagePayload = buildMessagePayload(formType, payload);
 
   try {
     const transporter = nodemailer.createTransport({
