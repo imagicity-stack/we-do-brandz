@@ -102,6 +102,37 @@ const ServiceDetail = () => {
     }));
   };
 
+  const sendEmailSubmission = async () => {
+    const payload = {
+      formType: 'service-booking',
+      locale,
+      serviceSlug,
+      subServiceSlug,
+      serviceName: subService.name,
+      categoryName: category.name,
+      totalAmountLabel,
+      checkoutAmount,
+      checkoutCurrency,
+      checkoutDisplayAmount,
+      checkoutDisplayCurrency,
+      addVfx: isReelsEditing ? (addVfx ? 'yes' : 'no') : undefined,
+      ...form
+    };
+
+    const response = await fetch('/api/send-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => null);
+      throw new Error(data?.error || 'Unable to submit your booking request. Please try again.');
+    }
+  };
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
@@ -114,14 +145,15 @@ const ServiceDetail = () => {
 
     setIsSubmitting(true);
 
-    if (isUS) {
-      setSuccess('Thanks! Our team will connect with you shortly to complete your booking.');
-      setForm(initialFormState);
-      setIsSubmitting(false);
-      return;
-    }
-
     try {
+      await sendEmailSubmission();
+
+      if (isUS) {
+        setSuccess('Thanks! Our team will connect with you shortly to complete your booking.');
+        setForm(initialFormState);
+        return;
+      }
+
       const response = await fetch(`${API_BASE_URL}/api/create-order`, {
         method: 'POST',
         headers: {

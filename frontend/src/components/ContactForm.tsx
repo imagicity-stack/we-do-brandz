@@ -20,16 +20,45 @@ const initialState: FormState = {
 export const ContactForm = () => {
   const [form, setForm] = useState<FormState>(initialState);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.currentTarget;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    setSubmitted(true);
-    setForm(initialState);
+    setError(null);
+    setSubmitted(false);
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ formType: 'contact', ...form })
+      });
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => null);
+        throw new Error(payload?.error || 'Unable to send your message. Please try again.');
+      }
+
+      setSubmitted(true);
+      setForm(initialState);
+    } catch (submissionError) {
+      setError(
+        submissionError instanceof Error
+          ? submissionError.message
+          : 'Something went wrong while sending your request. Please try again.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -56,9 +85,10 @@ export const ContactForm = () => {
         How can we help?
         <textarea name="message" value={form.message} onInput={handleChange} required rows={4} placeholder="Tell us about your goals" />
       </label>
-      <button className="primary-button" type="submit">
-        Submit inquiry
+      <button className="primary-button" type="submit" disabled={isSubmitting}>
+        {isSubmitting ? 'Sending…' : 'Submit inquiry'}
       </button>
+      {error && <p className="form-error">{error}</p>}
       {submitted && <p className="form-success">Thank you! We&apos;ll get in touch within one business day.</p>}
     </form>
   );
