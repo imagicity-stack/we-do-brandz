@@ -64,13 +64,13 @@ const ServiceDetail = () => {
     displayAmount: checkoutDisplayAmount,
     displayCurrency: checkoutDisplayCurrency
   } = getCheckoutAmount(locale, totalAmountInINR);
-  const metaValue = locale === 'in' ? totalAmountInINR : checkoutDisplayAmount ?? totalAmountInINR;
-  const metaCurrency = locale === 'in' ? 'INR' : 'USD';
+  const metaEventValue = locale === 'in' ? totalAmountInINR : checkoutDisplayAmount ?? totalAmountInINR;
+  const metaEventCurrency = locale === 'in' ? 'INR' : 'USD';
 
   useMetaPageEvents(match?.subService.name ?? 'Service detail', {
     params: {
-      content_category: match?.category.name ?? 'Service detail',
-      ...(match ? { value: metaValue, currency: metaCurrency } : {})
+        content_category: match?.category.name ?? 'Service detail',
+        ...(match ? { value: metaEventValue, currency: metaEventCurrency } : {})
     }
   });
 
@@ -99,21 +99,6 @@ const ServiceDetail = () => {
   const actionButtonLabel = isUS ? 'Connect now' : paymentButtonLabel;
   const isActionDisabled = isSubmitting || (isIndia && !isLoaded);
   const showEmiNote = isIndia && subService.priceInINR > 1000;
-  const metaValue = locale === 'in' ? totalAmountInINR : checkoutDisplayAmount ?? totalAmountInINR;
-  const metaCurrency = locale === 'in' ? 'INR' : 'USD';
-
-  useEffect(() => {
-    setAddVfx(false);
-  }, [subService.id]);
-
-  useEffect(() => {
-    trackMetaEvent('ViewContent', {
-      content_name: subService.name,
-      content_category: category.name,
-      value: metaValue,
-      currency: metaCurrency
-    });
-  }, [category.name, metaCurrency, metaValue, subService.name]);
 
   useEffect(() => {
     setAddVfx(false);
@@ -175,8 +160,8 @@ const ServiceDetail = () => {
       trackMetaEvent('Lead', {
         content_name: subService.name,
         content_category: category.name,
-        value: metaValue,
-        currency: metaCurrency
+        value: metaEventValue,
+        currency: metaEventCurrency
       });
 
       if (isUS) {
@@ -229,8 +214,8 @@ const ServiceDetail = () => {
       trackMetaEvent('InitiateCheckout', {
         content_name: subService.name,
         content_category: category.name,
-        value: metaValue,
-        currency: metaCurrency
+        value: metaEventValue,
+        currency: metaEventCurrency
       });
 
       openCheckout({
