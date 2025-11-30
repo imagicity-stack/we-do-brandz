@@ -23,8 +23,8 @@
 }
 
 .logo-image {
-  width: 6.25rem;
-  height: 6.25rem;
+  width: 9rem;
+  height: 9rem;
   object-fit: contain;
 }
 
@@ -34,12 +34,18 @@
   gap: 1.5rem;
 }
 
+.nav-header {
+  display: none;
+}
+
 .nav-link {
   font-weight: 700;
   font-size: 0.98rem;
   color: rgba(12, 27, 51, 0.75);
   position: relative;
   padding: 0.35rem 0.25rem;
+  display: block;
+  width: 100%;
   transition: color 0.2s ease;
 }
 
@@ -91,11 +97,6 @@
   position: relative;
 }
 
-
-.search-mobile {
-  width: 100%;
-  display: none;
-}
 
 .search-toggle {
   display: grid;
@@ -198,8 +199,8 @@
   }
 
   .logo-image {
-    width: 5.25rem;
-    height: 5.25rem;
+    width: 8rem;
+    height: 8rem;
   }
 
   .header-actions {
@@ -223,7 +224,7 @@
     left: 5vw;
     background: var(--brand-light);
     border-radius: 1rem;
-    padding: 1.5rem;
+    padding: 1.25rem 1.4rem;
     box-shadow: 0 20px 40px rgba(6, 12, 31, 0.12);
     flex-direction: column;
     align-items: flex-start;
@@ -235,22 +236,58 @@
     transition: opacity 0.2s ease, transform 0.2s ease;
   }
 
+  .nav-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    padding: 0.35rem 0 0.85rem;
+    margin-bottom: 0.45rem;
+    border-bottom: 1px solid rgba(12, 27, 51, 0.12);
+  }
+
+  .nav-logo img {
+    width: 6rem;
+    height: auto;
+    display: block;
+  }
+
+  .nav-close {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.85rem;
+    border: 1px solid rgba(12, 27, 51, 0.12);
+    background: white;
+    color: var(--brand-secondary);
+    cursor: pointer;
+    gap: 0.35rem;
+  }
+
+  .nav-close span {
+    display: block;
+    width: 1.1rem;
+    height: 2px;
+    background: currentColor;
+    border-radius: 999px;
+  }
+
+  .nav-close span:first-child {
+    transform: translateY(2px) rotate(45deg);
+  }
+
+  .nav-close span:last-child {
+    transform: translateY(-2px) rotate(-45deg);
+  }
+
   .search-desktop {
     display: none;
   }
 
   .search-toggle {
     display: none;
-  }
-
-  .search-mobile {
-    display: block;
-    margin-top: 0.5rem;
-    width: 100%;
-  }
-
-  .search-mobile .search-bar {
-    max-width: none;
   }
 
   .nav.nav-open {
