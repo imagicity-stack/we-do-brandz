@@ -189,19 +189,22 @@
 
 @media (max-width: 900px) {
   .header-inner {
-    flex-wrap: wrap;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 1rem;
   }
 
   .header-actions {
     width: 100%;
     order: 3;
+    grid-column: 1 / -1;
     flex-direction: column;
     align-items: stretch;
   }
 
   .logo {
-    order: 1;
+    grid-column: 1;
   }
 
   .nav {
@@ -249,7 +252,7 @@
 
   .mobile-toggle {
     display: flex;
-    order: 2;
-    margin-left: 0;
+    grid-column: 2;
+    justify-self: end;
   }
 }
