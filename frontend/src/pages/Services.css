@@ -38,7 +38,12 @@
   margin-bottom: 2rem;
 }
 
-.stacked-list {
-  display: grid;
-  gap: 1.75rem;
+.search-context {
+  margin: 0 auto 2rem;
+  font-weight: 600;
+}
+
+.search-context.muted {
+  color: rgba(12, 27, 51, 0.6);
+  font-weight: 500;
 }

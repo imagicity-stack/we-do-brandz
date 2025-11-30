@@ -17,16 +17,17 @@ export const SubServiceCard = ({ category, service }: Props) => {
 
   return (
     <div className="subservice-card">
-      <div>
+      <div className="subservice-content">
         <span className="tag">{category.name}</span>
         <h3>{service.name}</h3>
-        <p>{service.description}</p>
-        <ul>
+        <p className="subservice-description">{service.description}</p>
+        <ul className="subservice-deliverables">
           {service.deliverables.map((item) => (
             <li key={item}>{item}</li>
           ))}
         </ul>
       </div>
+
       <div className="subservice-meta">
         <div className="price-block">
           <span className="price">{localizedPrice}</span>

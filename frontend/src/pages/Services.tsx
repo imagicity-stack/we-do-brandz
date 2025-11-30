@@ -1,11 +1,31 @@
 import { useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { serviceCategories } from '../data/services';
-import SubServiceCard from '../components/SubServiceCard';
+import ServiceCarousel from '../components/ServiceCarousel';
 import './Services.css';
 import { useMetaPageEvents } from '../hooks/useMetaPageEvents';
 
 const Services = () => {
   useMetaPageEvents('Services', { params: { content_category: 'Services Overview' } });
+
+  const [searchParams] = useSearchParams();
+  const searchTerm = (searchParams.get('q') || '').trim().toLowerCase();
+  const hasSearch = searchTerm.length > 0;
+
+  const filteredCategories = useMemo(
+    () =>
+      serviceCategories
+        .map((category) => ({
+          ...category,
+          subServices: hasSearch
+            ? category.subServices.filter((service) =>
+                `${service.name} ${service.description}`.toLowerCase().includes(searchTerm)
+              )
+            : category.subServices
+        }))
+        .filter((category) => category.subServices.length > 0),
+    [hasSearch, searchTerm]
+  );
 
   const categoryAnchors = useMemo(
     () =>
@@ -16,6 +36,10 @@ const Services = () => {
       })),
     []
   );
+
+  const anchorList = hasSearch
+    ? filteredCategories.map((category) => ({ id: category.slug, name: category.name, summary: category.summary }))
+    : categoryAnchors;
 
   return (
     <main className="services-page">
@@ -28,7 +52,7 @@ const Services = () => {
             execution, and measurable outcomes.
           </p>
           <div className="services-pill-row">
-            {categoryAnchors.map((category) => (
+            {anchorList.map((category) => (
               <a key={category.id} href={`#${category.id}`} className="pill-link">
                 {category.name}
               </a>
@@ -37,7 +61,13 @@ const Services = () => {
         </div>
       </section>
 
-      {serviceCategories.map((category) => (
+      {hasSearch && (
+        <div className="main-container search-context">
+          Showing results for <strong>{searchTerm}</strong>
+        </div>
+      )}
+
+      {filteredCategories.map((category) => (
         <section className="section" id={category.slug} key={category.id}>
           <div className="main-container">
             <div className="category-header">
@@ -45,14 +75,14 @@ const Services = () => {
               <h2>{category.tagline}</h2>
               <p className="section-intro">{category.summary}</p>
             </div>
-            <div className="stacked-list">
-              {category.subServices.map((service) => (
-                <SubServiceCard key={service.id} category={category} service={service} />
-              ))}
-            </div>
+            <ServiceCarousel category={category} services={category.subServices} />
           </div>
         </section>
       ))}
+
+      {filteredCategories.length === 0 && (
+        <div className="main-container search-context muted">No services matched your search.</div>
+      )}
     </main>
   );
 };
