@@ -26,7 +26,9 @@ export const Header = () => {
           <span className="logo-accent">Brandz</span>
         </Link>
         <div className="header-actions">
-          <SearchBar onNavigate={closeMenu} />
+          <div className="search-desktop">
+            <SearchBar onNavigate={closeMenu} />
+          </div>
           <nav className={`nav ${isOpen ? 'nav-open' : ''}`}>
             {menuItems.map((item) => (
               <NavLink
@@ -38,6 +40,9 @@ export const Header = () => {
                 {item.label}
               </NavLink>
             ))}
+            <div className="search-mobile">
+              <SearchBar onNavigate={closeMenu} />
+            </div>
           </nav>
         </div>
         <button className={`mobile-toggle ${isOpen ? 'open' : ''}`} onClick={toggleMenu} aria-label="Toggle menu">

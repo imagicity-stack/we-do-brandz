@@ -89,9 +89,19 @@
   justify-content: flex-end;
 }
 
-.header .search-bar {
+
+.search-desktop,
+.search-mobile {
+  width: 100%;
+}
+
+.search-desktop .search-bar {
   max-width: 360px;
   width: 100%;
+}
+
+.search-mobile {
+  display: none;
 }
 
 .mobile-toggle span {
@@ -122,10 +132,6 @@
     align-items: stretch;
   }
 
-  .header .search-bar {
-    max-width: none;
-  }
-
   .nav {
     position: absolute;
     top: 90px;
@@ -143,6 +149,20 @@
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .search-desktop {
+    display: none;
+  }
+
+  .search-mobile {
+    display: block;
+    margin-top: 0.5rem;
+    width: 100%;
+  }
+
+  .search-mobile .search-bar {
+    max-width: none;
   }
 
   .nav.nav-open {
