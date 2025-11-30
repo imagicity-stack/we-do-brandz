@@ -33,8 +33,7 @@ export const Header = () => {
           <span />
         </button>
         <Link to={buildPath('/')} className="logo" onClick={closeMenu}>
-          <span className="logo-mark">We do</span>
-          <span className="logo-accent">Brandz</span>
+          <img src="/side.png" alt="We do Brandz" className="logo-image" />
         </Link>
         <div className="header-actions">
           <nav className={`nav ${isOpen ? 'nav-open' : ''}`}>

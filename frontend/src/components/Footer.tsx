@@ -10,7 +10,9 @@ export const Footer = () => {
     <footer className="footer">
       <div className="main-container footer-inner">
         <div className="footer-brand">
-          <h3>We do Brandz</h3>
+          <div className="footer-logo">
+            <img src="/side.png" alt="We do Brandz" />
+          </div>
           <p>We partner with ambitious founders and marketing teams to build magnetic brands that scale.</p>
         </div>
         <div className="footer-links">
