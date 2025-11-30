@@ -49,10 +49,19 @@ export const ContactForm = () => {
         throw new Error(payload?.error || 'Unable to send your message. Please try again.');
       }
 
+      const [firstName, ...rest] = form.name.trim().split(/\s+/);
+      const lastName = rest.length ? rest.join(' ') : undefined;
+      const userData = {
+        email: form.email,
+        phone: form.phone,
+        firstName,
+        lastName
+      };
+
       setSubmitted(true);
       setForm(initialState);
-      trackMetaEvent('Lead');
-      trackMetaEvent('Contact');
+      trackMetaEvent('Lead', undefined, userData);
+      trackMetaEvent('Contact', undefined, userData);
     } catch (submissionError) {
       setError(
         submissionError instanceof Error

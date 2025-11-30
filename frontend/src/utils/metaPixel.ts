@@ -1,3 +1,5 @@
+import { sendMetaConversionEvent, type MetaUserData } from './metaConversions';
+
 export type MetaPixelEventParams = Record<string, unknown> | undefined;
 
 type FbqFunction = ((command: 'track', event: string, params?: MetaPixelEventParams) => void) &
@@ -9,7 +11,7 @@ declare global {
   }
 }
 
-export const trackMetaEvent = (event: string, params?: MetaPixelEventParams) => {
+export const trackMetaEvent = (event: string, params?: MetaPixelEventParams, userData?: MetaUserData) => {
   if (typeof window === 'undefined') {
     return;
   }
@@ -23,4 +25,6 @@ export const trackMetaEvent = (event: string, params?: MetaPixelEventParams) => 
       fbq('track', event);
     }
   }
+
+  sendMetaConversionEvent(event, { customData: params, userData });
 };

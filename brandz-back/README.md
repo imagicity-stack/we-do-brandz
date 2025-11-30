@@ -35,6 +35,9 @@ orders used by the frontend booking flow.
 | `RAZORPAY_KEY_ID`     | Razorpay public key for order creation.          |
 | `RAZORPAY_KEY_SECRET` | Razorpay secret key (keep this value protected). |
 | `ALLOWED_ORIGINS`     | Comma-separated list of domains allowed via CORS |
+| `META_PIXEL_ID`       | Meta Pixel ID used for Conversions API requests  |
+| `META_ACCESS_TOKEN`   | Meta access token for the Conversions API        |
+| `META_API_VERSION`    | Graph API version (default: `v21.0`)             |
 
 ## API
 
@@ -62,3 +65,24 @@ Create a Razorpay order for a selected service.
 **Response**
 
 Returns the Razorpay order payload on success.
+
+### `POST /api/meta-events`
+
+Forward supported Meta standard events to the Conversions API.
+
+**Body**
+
+```json
+{
+  "event_name": "Lead",
+  "event_source_url": "https://wedobrandz.com/contact",
+  "custom_data": { "content_name": "Contact" },
+  "user_data": { "em": "person@example.com" }
+}
+```
+
+**Notes**
+
+- `event_name`, `event_source_url`, and `action_source` (defaults to `website`) are required.
+- `user_data` fields such as `em`, `ph`, `fn`, `ln`, `ct`, and `zp` are automatically SHA-256 hashed on the server.
+- Client IP and user agent are captured from the request and forwarded as required by the Conversions API.
