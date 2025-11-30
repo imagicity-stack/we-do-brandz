@@ -12,10 +12,6 @@ export const Footer = () => {
         <div className="footer-brand">
           <div className="footer-logo">
             <img src="/side.png" alt="We do Brandz" />
-            <div className="footer-logo-text">
-              <span className="footer-logo-mark">We do</span>
-              <span className="footer-logo-accent">Brandz</span>
-            </div>
           </div>
           <p>We partner with ambitious founders and marketing teams to build magnetic brands that scale.</p>
         </div>

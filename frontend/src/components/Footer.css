@@ -14,32 +14,14 @@
 .footer-logo {
   display: inline-flex;
   align-items: center;
-  gap: 0.65rem;
+  padding: 0.35rem 0;
   margin-bottom: 0.75rem;
 }
 
 .footer-logo img {
-  width: 2.8rem;
-  height: 2.8rem;
+  width: 3.2rem;
+  height: 3.2rem;
   object-fit: contain;
-}
-
-.footer-logo-text {
-  display: flex;
-  align-items: baseline;
-  gap: 0.35rem;
-  font-size: 1.5rem;
-  line-height: 1;
-}
-
-.footer-logo-mark {
-  color: #ffffff;
-  font-weight: 700;
-}
-
-.footer-logo-accent {
-  color: var(--brand-primary);
-  font-weight: 800;
 }
 
 .footer-brand p {
