@@ -14,13 +14,13 @@
 .footer-logo {
   display: inline-flex;
   align-items: center;
-  padding: 0.5rem 0.15rem;
+  padding: 0.75rem 0.35rem;
   margin-bottom: 0.75rem;
 }
 
 .footer-logo img {
-  width: 3.8rem;
-  height: 3.8rem;
+  width: 4.8rem;
+  height: 4.8rem;
   object-fit: contain;
 }
 
