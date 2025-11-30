@@ -1,13 +1,27 @@
+
 .subservice-card {
-  background: var(--brand-light);
-  border-radius: 1.5rem;
-  padding: 2rem;
-  border: 1px solid rgba(12, 27, 51, 0.08);
+  background: linear-gradient(145deg, rgba(81, 99, 251, 0.08), rgba(28, 45, 90, 0.08));
+  border-radius: 1.4rem;
+  padding: 1.75rem;
+  border: 1px solid rgba(12, 27, 51, 0.12);
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 2rem;
-  align-items: center;
-  box-shadow: 0 18px 36px rgba(12, 27, 51, 0.08);
+  gap: 1.5rem;
+  align-items: start;
+  box-shadow: 0 18px 40px rgba(12, 27, 51, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.subservice-card::after {
+  content: '';
+  position: absolute;
+  right: -40%;
+  bottom: -60%;
+  width: 75%;
+  aspect-ratio: 1 / 1;
+  background: radial-gradient(circle, rgba(81, 99, 251, 0.35), rgba(81, 99, 251, 0));
+  opacity: 0.6;
 }
 
 .subservice-card ul {
@@ -17,16 +31,24 @@
   color: rgba(12, 27, 51, 0.72);
 }
 
+.subservice-card > div {
+  position: relative;
+  z-index: 1;
+}
+
 .subservice-card li::before {
-  content: '•';
+  content: '✓';
   margin-right: 0.5rem;
   color: var(--brand-primary);
+  font-weight: 700;
 }
 
 .subservice-meta {
   display: grid;
   gap: 1rem;
   justify-items: end;
+  position: relative;
+  z-index: 1;
 }
 
 .price-block {
@@ -47,6 +69,16 @@
 
 .subservice-card small {
   color: rgba(12, 27, 51, 0.6);
+}
+
+.subservice-card .primary-button {
+  background: linear-gradient(120deg, var(--brand-primary), var(--brand-secondary));
+  border: none;
+  color: white;
+  padding: 0.85rem 1.25rem;
+  border-radius: 0.9rem;
+  font-weight: 700;
+  box-shadow: 0 12px 24px rgba(12, 27, 51, 0.22);
 }
 
 @media (max-width: 900px) {

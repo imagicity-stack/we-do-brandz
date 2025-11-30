@@ -12,6 +12,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.25rem 0;
+  gap: 1.5rem;
 }
 
 .logo {
@@ -35,7 +36,7 @@
 .nav {
   display: flex;
   align-items: center;
-  gap: 1.75rem;
+  gap: 1.25rem;
 }
 
 .nav-link {
@@ -80,6 +81,19 @@
   cursor: pointer;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.header .search-bar {
+  max-width: 360px;
+  width: 100%;
+}
+
 .mobile-toggle span {
   display: block;
   width: 1.75rem;
@@ -97,17 +111,33 @@
 }
 
 @media (max-width: 900px) {
+  .header-inner {
+    flex-wrap: wrap;
+  }
+
+  .header-actions {
+    width: 100%;
+    order: 3;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header .search-bar {
+    max-width: none;
+  }
+
   .nav {
     position: absolute;
-    top: 72px;
+    top: 90px;
     right: 5vw;
+    left: 5vw;
     background: var(--brand-light);
     border-radius: 1rem;
-    padding: 1.25rem 1.75rem;
+    padding: 1.5rem;
     box-shadow: 0 20px 40px rgba(6, 12, 31, 0.12);
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 1.25rem;
     transform: scale(0.9);
     transform-origin: top right;
     opacity: 0;
