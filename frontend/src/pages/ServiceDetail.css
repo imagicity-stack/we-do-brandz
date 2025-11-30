@@ -118,6 +118,11 @@
   margin-top: 0.25rem;
 }
 
+.checkbox a {
+  color: var(--brand-primary);
+  font-weight: 600;
+}
+
 .form-error {
   color: #d64545;
   font-weight: 600;
