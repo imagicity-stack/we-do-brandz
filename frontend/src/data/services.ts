@@ -39,8 +39,8 @@ export const serviceCategories: ServiceCategory[] = [
           'Includes final files for print & digital use'
         ],
         deliveryTimeline: 'Delivery: 3–5 days',
-        priceLabel: '₹4,999',
-        priceInINR: 4999
+        priceLabel: '₹2,999',
+        priceInINR: 2999
       },
       {
         id: 'full-brand-kit',
@@ -53,8 +53,8 @@ export const serviceCategories: ServiceCategory[] = [
           'Includes business card & social media display design'
         ],
         deliveryTimeline: 'Delivery: 7–10 days',
-        priceLabel: '₹15,999',
-        priceInINR: 15999
+        priceLabel: '₹13,999',
+        priceInINR: 13999
       },
       {
         id: 'rebranding',
@@ -67,8 +67,8 @@ export const serviceCategories: ServiceCategory[] = [
           'Updated logo + brand guidelines + rollout templates'
         ],
         deliveryTimeline: 'Delivery: 10–14 days',
-        priceLabel: '₹18,999',
-        priceInINR: 18999
+        priceLabel: '₹15,999',
+        priceInINR: 15999
       },
       {
         id: 'business-collateral-design',
@@ -81,8 +81,8 @@ export const serviceCategories: ServiceCategory[] = [
           'Consistent look & feel across items'
         ],
         deliveryTimeline: 'Delivery: 2–4 days',
-        priceLabel: '₹1,500 per set',
-        priceInINR: 1500,
+        priceLabel: '₹899 per set',
+        priceInINR: 899,
         priceNote: 'Pricing reflects each collateral set.'
       }
     ]
@@ -234,8 +234,8 @@ export const serviceCategories: ServiceCategory[] = [
           'Optimized for ads'
         ],
         deliveryTimeline: 'Delivery: 3 days',
-        priceLabel: '₹6,999',
-        priceInINR: 6999
+        priceLabel: '₹5,999',
+        priceInINR: 5999
       }
     ]
   },
