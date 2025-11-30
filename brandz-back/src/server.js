@@ -7,6 +7,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { logNote } from './utils/notes.js';
+import { isMetaConfigured, sendMetaEvent } from './utils/metaConversions.js';
 
 dotenv.config();
 
@@ -43,6 +44,22 @@ const razorpay = new Razorpay({
 
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', service: 'brandz-back' });
+});
+
+app.post('/api/meta-events', async (req, res) => {
+  if (!isMetaConfigured()) {
+    res.status(503).json({ error: 'Meta Pixel configuration is missing on the server.' });
+    return;
+  }
+
+  try {
+    const response = await sendMetaEvent(req.body, req);
+    res.json({ success: true, response });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unable to send Meta event.';
+    logNote('Meta event forwarding failed', { error: message });
+    res.status(400).json({ error: message });
+  }
 });
 
 app.post('/api/create-order', async (req, res) => {

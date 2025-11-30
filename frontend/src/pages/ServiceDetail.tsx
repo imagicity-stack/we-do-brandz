@@ -147,6 +147,18 @@ const ServiceDetail = () => {
     }
   };
 
+  const buildMetaUserData = () => {
+    const [firstName, ...rest] = form.name.trim().split(/\s+/);
+    const lastName = rest.length ? rest.join(' ') : undefined;
+
+    return {
+      email: form.email || undefined,
+      phone: form.contactNumber || undefined,
+      firstName,
+      lastName
+    };
+  };
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
@@ -161,18 +173,24 @@ const ServiceDetail = () => {
 
     try {
       await sendEmailSubmission();
-      trackMetaEvent('Lead', {
-        content_name: subService.name,
-        content_category: category.name,
-        value: metaEventValue,
-        currency: metaEventCurrency
-      });
+      const userData = buildMetaUserData();
+
+      trackMetaEvent(
+        'Lead',
+        {
+          content_name: subService.name,
+          content_category: category.name,
+          value: metaEventValue,
+          currency: metaEventCurrency
+        },
+        userData
+      );
 
       if (isUS) {
         trackMetaEvent('Contact', {
           content_name: subService.name,
           content_category: category.name
-        });
+        }, userData);
         setSuccess('Thanks! Our team will connect with you shortly to complete your booking.');
         setForm(initialFormState);
         return;
@@ -220,7 +238,7 @@ const ServiceDetail = () => {
         content_category: category.name,
         value: metaEventValue,
         currency: metaEventCurrency
-      });
+      }, userData);
 
       openCheckout({
         key: order.key ?? RAZORPAY_KEY_ID,
