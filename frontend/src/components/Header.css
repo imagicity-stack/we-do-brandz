@@ -25,6 +25,12 @@
   line-height: 1;
 }
 
+.logo-image {
+  width: 2.4rem;
+  height: 2.4rem;
+  object-fit: contain;
+}
+
 .logo-mark {
   font-weight: 600;
 }
@@ -201,6 +207,11 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.75rem 0;
+  }
+
+  .logo-image {
+    width: 2.1rem;
+    height: 2.1rem;
   }
 
   .header-actions {

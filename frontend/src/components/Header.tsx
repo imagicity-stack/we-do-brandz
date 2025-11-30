@@ -33,6 +33,7 @@ export const Header = () => {
           <span />
         </button>
         <Link to={buildPath('/')} className="logo" onClick={closeMenu}>
+          <img src="/side.png" alt="We do Brandz" className="logo-image" />
           <span className="logo-mark">We do</span>
           <span className="logo-accent">Brandz</span>
         </Link>
