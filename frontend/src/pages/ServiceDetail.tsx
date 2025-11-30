@@ -67,6 +67,10 @@ const ServiceDetail = () => {
   const metaEventValue = locale === 'in' ? totalAmountInINR : checkoutDisplayAmount ?? totalAmountInINR;
   const metaEventCurrency = locale === 'in' ? 'INR' : 'USD';
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [serviceSlug, subServiceSlug]);
+
   useMetaPageEvents(match?.subService.name ?? 'Service detail', {
     params: {
         content_category: match?.category.name ?? 'Service detail',
