@@ -190,7 +190,7 @@
 @media (max-width: 900px) {
   .header-inner {
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: space-between;
   }
 
   .header-actions {
@@ -250,6 +250,6 @@
   .mobile-toggle {
     display: flex;
     order: 2;
-    margin-left: auto;
+    margin-left: 0;
   }
 }
