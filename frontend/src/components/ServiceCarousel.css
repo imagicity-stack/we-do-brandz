@@ -12,6 +12,8 @@
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   padding-bottom: 0.5rem;
+  align-items: stretch;
+  grid-auto-rows: 1fr;
 }
 
 .carousel-track::-webkit-scrollbar {
@@ -25,6 +27,7 @@
 
 .carousel-slide {
   scroll-snap-align: start;
+  height: 100%;
 }
 
 .carousel-controls {
