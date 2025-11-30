@@ -13,22 +13,30 @@ const menuItems = [
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDesktopSearchOpen, setIsDesktopSearchOpen] = useState(false);
   const buildPath = useLocalePath();
 
   const toggleMenu = () => setIsOpen((prev) => !prev);
   const closeMenu = () => setIsOpen(false);
+  const toggleDesktopSearch = () => setIsDesktopSearchOpen((prev) => !prev);
+  const closeDesktopSearch = () => setIsDesktopSearchOpen(false);
 
   return (
     <header className="header">
       <div className="main-container header-inner">
+        <button
+          className={`mobile-toggle ${isOpen ? 'open' : ''}`}
+          onClick={toggleMenu}
+          aria-label="Toggle menu"
+        >
+          <span />
+          <span />
+        </button>
         <Link to={buildPath('/')} className="logo" onClick={closeMenu}>
           <span className="logo-mark">We do</span>
           <span className="logo-accent">Brandz</span>
         </Link>
         <div className="header-actions">
-          <div className="search-desktop">
-            <SearchBar onNavigate={closeMenu} />
-          </div>
           <nav className={`nav ${isOpen ? 'nav-open' : ''}`}>
             {menuItems.map((item) => (
               <NavLink
@@ -44,11 +52,23 @@ export const Header = () => {
               <SearchBar onNavigate={closeMenu} />
             </div>
           </nav>
+          <button
+            type="button"
+            className={`search-toggle ${isDesktopSearchOpen ? 'open' : ''}`}
+            onClick={toggleDesktopSearch}
+            aria-label={isDesktopSearchOpen ? 'Close search' : 'Open search'}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path
+                d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l4.25 4.25a1 1 0 0 0 1.42-1.42L15.5 14Zm-6 0a5 5 0 1 1 0-10 5 5 0 0 1 0 10Z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+          <div className={`search-desktop ${isDesktopSearchOpen ? 'open' : ''}`}>
+            <SearchBar onNavigate={() => { closeMenu(); closeDesktopSearch(); }} autoFocus={isDesktopSearchOpen} />
+          </div>
         </div>
-        <button className={`mobile-toggle ${isOpen ? 'open' : ''}`} onClick={toggleMenu} aria-label="Toggle menu">
-          <span />
-          <span />
-        </button>
       </div>
     </header>
   );

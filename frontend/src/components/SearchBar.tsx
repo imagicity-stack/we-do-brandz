@@ -15,6 +15,7 @@ type SearchSuggestion = {
 
 interface Props {
   onNavigate?: () => void;
+  autoFocus?: boolean;
 }
 
 const MAX_SUGGESTIONS = 6;
@@ -42,7 +43,7 @@ const buildSuggestions = (query: string): SearchSuggestion[] => {
   return matchedServices.slice(0, MAX_SUGGESTIONS);
 };
 
-export const SearchBar = ({ onNavigate }: Props) => {
+export const SearchBar = ({ onNavigate, autoFocus }: Props) => {
   const [query, setQuery] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const navigate = useNavigate();
@@ -87,6 +88,7 @@ export const SearchBar = ({ onNavigate }: Props) => {
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search services"
           aria-label="Search services"
+          autoFocus={autoFocus}
         />
         <button type="submit" aria-label="Search">
           🔍
