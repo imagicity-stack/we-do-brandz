@@ -11,14 +11,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 0;
+  padding: 0.75rem 0;
   gap: 1.5rem;
 }
 
 .logo {
   display: flex;
   align-items: center;
-  padding: 0.9rem 1.1rem;
+  padding: 0.65rem 0.95rem;
   border-radius: 0.9rem;
 }
 
@@ -32,10 +32,6 @@
   display: flex;
   align-items: center;
   gap: 1.5rem;
-}
-
-.nav-header {
-  display: none;
 }
 
 .nav-link {
@@ -95,6 +91,12 @@
   flex: 1;
   justify-content: flex-end;
   position: relative;
+}
+
+.nav-search {
+  display: none;
+  width: 100%;
+  margin-top: 0.5rem;
 }
 
 
@@ -194,8 +196,8 @@
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
-    gap: 0.9rem;
-    padding: 0.85rem 0;
+    gap: 0.7rem;
+    padding: 0.7rem 0;
   }
 
   .logo-image {
@@ -204,17 +206,14 @@
   }
 
   .header-actions {
-    width: 100%;
-    order: 3;
-    grid-column: 1 / -1;
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .logo {
-    grid-column: 1;
+    width: auto;
+    order: initial;
+    grid-column: 3;
     align-self: center;
-    justify-self: start;
+    justify-self: end;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
   }
 
   .nav {
@@ -236,52 +235,6 @@
     transition: opacity 0.2s ease, transform 0.2s ease;
   }
 
-  .nav-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    width: 100%;
-    padding: 0.35rem 0 0.85rem;
-    margin-bottom: 0.45rem;
-    border-bottom: 1px solid rgba(12, 27, 51, 0.12);
-  }
-
-  .nav-logo img {
-    width: 6rem;
-    height: auto;
-    display: block;
-  }
-
-  .nav-close {
-    display: grid;
-    place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 0.85rem;
-    border: 1px solid rgba(12, 27, 51, 0.12);
-    background: white;
-    color: var(--brand-secondary);
-    cursor: pointer;
-    gap: 0.35rem;
-  }
-
-  .nav-close span {
-    display: block;
-    width: 1.1rem;
-    height: 2px;
-    background: currentColor;
-    border-radius: 999px;
-  }
-
-  .nav-close span:first-child {
-    transform: translateY(2px) rotate(45deg);
-  }
-
-  .nav-close span:last-child {
-    transform: translateY(-2px) rotate(-45deg);
-  }
-
   .search-desktop {
     display: none;
   }
@@ -294,6 +247,10 @@
     transform: scale(1);
     opacity: 1;
     pointer-events: auto;
+  }
+
+  .nav-search {
+    display: block;
   }
 
   .mobile-toggle {
