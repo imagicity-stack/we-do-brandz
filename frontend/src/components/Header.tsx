@@ -33,10 +33,19 @@ export const Header = () => {
           <span />
         </button>
         <Link to={buildPath('/')} className="logo" onClick={closeMenu}>
-          <img src="/side.png" alt="We do Brandz" className="logo-image" />
+          <img src="/logo.svg" alt="We do Brandz" className="logo-image" />
         </Link>
         <div className="header-actions">
           <nav className={`nav ${isOpen ? 'nav-open' : ''}`}>
+            <div className="nav-header">
+              <Link to={buildPath('/')} className="nav-logo" onClick={closeMenu}>
+                <img src="/logo.svg" alt="We do Brandz" />
+              </Link>
+              <button type="button" className="nav-close" onClick={toggleMenu} aria-label="Close menu">
+                <span />
+                <span />
+              </button>
+            </div>
             {menuItems.map((item) => (
               <NavLink
                 key={item.path}
