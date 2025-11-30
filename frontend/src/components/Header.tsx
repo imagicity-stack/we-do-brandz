@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useLocalePath } from '../hooks/useLocalePath';
+import SearchBar from './SearchBar';
 import './Header.css';
 
 const menuItems = [
@@ -24,18 +25,26 @@ export const Header = () => {
           <span className="logo-mark">We do</span>
           <span className="logo-accent">Brandz</span>
         </Link>
-        <nav className={`nav ${isOpen ? 'nav-open' : ''}`}>
-          {menuItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={buildPath(item.path)}
-              className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
-              onClick={closeMenu}
-            >
-              {item.label}
-            </NavLink>
-          ))}
-        </nav>
+        <div className="header-actions">
+          <div className="search-desktop">
+            <SearchBar onNavigate={closeMenu} />
+          </div>
+          <nav className={`nav ${isOpen ? 'nav-open' : ''}`}>
+            {menuItems.map((item) => (
+              <NavLink
+                key={item.path}
+                to={buildPath(item.path)}
+                className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+                onClick={closeMenu}
+              >
+                {item.label}
+              </NavLink>
+            ))}
+            <div className="search-mobile">
+              <SearchBar onNavigate={closeMenu} />
+            </div>
+          </nav>
+        </div>
         <button className={`mobile-toggle ${isOpen ? 'open' : ''}`} onClick={toggleMenu} aria-label="Toggle menu">
           <span />
           <span />
