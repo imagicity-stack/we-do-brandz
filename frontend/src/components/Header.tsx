@@ -56,9 +56,6 @@ export const Header = () => {
                 {item.label}
               </NavLink>
             ))}
-            <div className="search-mobile">
-              <SearchBar onNavigate={closeMenu} />
-            </div>
           </nav>
           <button
             type="button"

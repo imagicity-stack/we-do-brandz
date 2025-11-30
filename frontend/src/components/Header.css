@@ -23,8 +23,8 @@
 }
 
 .logo-image {
-  width: 6.25rem;
-  height: 6.25rem;
+  width: 9rem;
+  height: 9rem;
   object-fit: contain;
 }
 
@@ -44,6 +44,8 @@
   color: rgba(12, 27, 51, 0.75);
   position: relative;
   padding: 0.35rem 0.25rem;
+  display: block;
+  width: 100%;
   transition: color 0.2s ease;
 }
 
@@ -95,11 +97,6 @@
   position: relative;
 }
 
-
-.search-mobile {
-  width: 100%;
-  display: none;
-}
 
 .search-toggle {
   display: grid;
@@ -202,8 +199,8 @@
   }
 
   .logo-image {
-    width: 5.25rem;
-    height: 5.25rem;
+    width: 8rem;
+    height: 8rem;
   }
 
   .header-actions {
@@ -243,14 +240,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 1rem;
     width: 100%;
-    padding-bottom: 0.75rem;
-    margin-bottom: 0.25rem;
-    border-bottom: 1px solid rgba(12, 27, 51, 0.08);
+    padding: 0.35rem 0 0.85rem;
+    margin-bottom: 0.45rem;
+    border-bottom: 1px solid rgba(12, 27, 51, 0.12);
   }
 
   .nav-logo img {
-    width: 4.5rem;
+    width: 6rem;
     height: auto;
     display: block;
   }
@@ -290,16 +288,6 @@
 
   .search-toggle {
     display: none;
-  }
-
-  .search-mobile {
-    display: block;
-    margin-top: 0.5rem;
-    width: 100%;
-  }
-
-  .search-mobile .search-bar {
-    max-width: none;
   }
 
   .nav.nav-open {
