@@ -34,15 +34,6 @@ export const Header = () => {
         </Link>
 
         <nav className={`nav ${isNavOpen ? 'nav-open' : ''}`} aria-label="Primary">
-          <div className="nav-header">
-            <div className="nav-logo">
-              <img src="/logo.svg" alt="We do Brandz" />
-            </div>
-            <button className="nav-close" type="button" aria-label="Close navigation" onClick={() => setIsNavOpen(false)}>
-              <span />
-              <span />
-            </button>
-          </div>
           {navLinks.map((link) => (
             <Link
               key={link.href}

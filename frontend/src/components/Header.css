@@ -34,10 +34,6 @@
   gap: 1.5rem;
 }
 
-.nav-header {
-  display: none;
-}
-
 .nav-link {
   font-weight: 700;
   font-size: 0.98rem;
@@ -237,52 +233,6 @@
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease, transform 0.2s ease;
-  }
-
-  .nav-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    width: 100%;
-    padding: 0.35rem 0 0.85rem;
-    margin-bottom: 0.45rem;
-    border-bottom: 1px solid rgba(12, 27, 51, 0.12);
-  }
-
-  .nav-logo img {
-    width: 6rem;
-    height: auto;
-    display: block;
-  }
-
-  .nav-close {
-    display: grid;
-    place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 0.85rem;
-    border: 1px solid rgba(12, 27, 51, 0.12);
-    background: white;
-    color: var(--brand-secondary);
-    cursor: pointer;
-    gap: 0.35rem;
-  }
-
-  .nav-close span {
-    display: block;
-    width: 1.1rem;
-    height: 2px;
-    background: currentColor;
-    border-radius: 999px;
-  }
-
-  .nav-close span:first-child {
-    transform: translateY(2px) rotate(45deg);
-  }
-
-  .nav-close span:last-child {
-    transform: translateY(-2px) rotate(-45deg);
   }
 
   .search-desktop {
