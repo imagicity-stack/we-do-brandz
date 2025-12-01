@@ -57,11 +57,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     });
 
-    if (!order?.id || !order?.amount || !order?.currency) {
+    const { id, amount: gatewayAmount, currency: gatewayCurrency } = order ?? {};
+
+    if (!id || !gatewayAmount || !gatewayCurrency) {
       return res.status(502).json({ error: 'Payment gateway returned an invalid order response.' });
     }
 
-    res.status(200).json({ ...order, key: key_id });
+    res.status(200).json({ id, amount: Number(gatewayAmount), currency: gatewayCurrency, key: key_id });
   } catch (error) {
     res
       .status(500)
