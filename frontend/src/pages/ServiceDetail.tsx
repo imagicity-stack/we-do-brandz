@@ -26,8 +26,7 @@ const initialFormState: BookingFormState = {
   acceptedTerms: false
 };
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'https://brandz-back.onrender.com';
-const RAZORPAY_KEY_ID = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ?? 'rzp_live_ReprOUvcLlsQpx';
+const RAZORPAY_KEY_ID = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
 
 type RazorpayOrderResponse = {
   id: string;
@@ -213,7 +212,7 @@ const ServiceDetail = () => {
         return;
       }
 
-      const response = await fetch(`${API_BASE_URL}/api/create-order`, {
+      const response = await fetch('/api/create-order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -242,6 +241,12 @@ const ServiceDetail = () => {
         throw new Error('Received an invalid order response. Please try again later.');
       }
 
+      const resolvedKey = order.key ?? RAZORPAY_KEY_ID;
+
+      if (!resolvedKey) {
+        throw new Error('Payment gateway is not configured. Please try again later.');
+      }
+
       const displayOptions =
         checkoutDisplayCurrency && checkoutDisplayAmount
           ? {
@@ -258,7 +263,7 @@ const ServiceDetail = () => {
       }, userData);
 
       openCheckout({
-        key: order.key ?? RAZORPAY_KEY_ID,
+        key: resolvedKey,
         amount: order.amount,
         currency: order.currency,
         name: 'We do Brandz',
