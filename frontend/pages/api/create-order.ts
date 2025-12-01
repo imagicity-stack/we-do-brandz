@@ -32,7 +32,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { amount, currency = 'INR', name, email, contactNumber, brand, message, serviceId, serviceName, categoryName } =
     req.body || {};
 
-  if (!amount || amount <= 0) {
+  const normalizedAmount = Math.round(Number(amount));
+
+  if (!Number.isFinite(normalizedAmount) || normalizedAmount <= 0) {
     res.status(400).json({ error: 'Amount is required to create an order.' });
     return;
   }
@@ -40,8 +42,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const razorpay = buildClient();
     const order = await razorpay.orders.create({
-      amount,
-      currency,
+      amount: normalizedAmount,
+      currency: typeof currency === 'string' ? currency.toUpperCase() : 'INR',
       payment_capture: true,
       notes: {
         name,
