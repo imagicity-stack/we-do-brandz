@@ -231,11 +231,13 @@ const ServiceDetail = () => {
         })
       });
 
+      const data = await response.json().catch(() => null);
+
       if (!response.ok) {
-        throw new Error('Unable to initiate payment. Please try again later.');
+        throw new Error(data?.error || 'Unable to initiate payment. Please try again later.');
       }
 
-      const order: RazorpayOrderResponse = await response.json();
+      const order: RazorpayOrderResponse = data as RazorpayOrderResponse;
 
       if (!order?.id || !order?.amount || !order?.currency) {
         throw new Error('Received an invalid order response. Please try again later.');
