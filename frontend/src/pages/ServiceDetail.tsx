@@ -26,13 +26,11 @@ const initialFormState: BookingFormState = {
   acceptedTerms: false
 };
 
-const RAZORPAY_KEY_ID = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
-
 type RazorpayOrderResponse = {
   id: string;
   amount: number;
   currency: string;
-  key?: string;
+  key: string;
 };
 
 const REELS_VFX_ADD_ON_INR = 400;
@@ -239,14 +237,8 @@ const ServiceDetail = () => {
 
       const order: RazorpayOrderResponse = data as RazorpayOrderResponse;
 
-      if (!order?.id || !order?.amount || !order?.currency) {
+      if (!order?.id || !order?.amount || !order?.currency || !order?.key) {
         throw new Error('Received an invalid order response. Please try again later.');
-      }
-
-      const resolvedKey = order.key ?? RAZORPAY_KEY_ID;
-
-      if (!resolvedKey) {
-        throw new Error('Payment gateway is not configured. Please try again later.');
       }
 
       const displayOptions =
@@ -265,7 +257,7 @@ const ServiceDetail = () => {
       }, userData);
 
       openCheckout({
-        key: resolvedKey,
+        key: order.key,
         amount: order.amount,
         currency: order.currency,
         name: 'We do Brandz',
