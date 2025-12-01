@@ -35,6 +35,32 @@ type RazorpayOrderResponse = {
   key?: string;
 };
 
+type OrderApiResponse =
+  | (RazorpayOrderResponse & { order?: never; error?: string; message?: string })
+  | { order?: RazorpayOrderResponse; key?: string; error?: string; message?: string };
+
+const isValidOrder = (value: unknown): value is RazorpayOrderResponse => {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+
+  const candidate = value as Partial<RazorpayOrderResponse>;
+  return Boolean(candidate.id && candidate.amount && candidate.currency);
+};
+
+const extractOrder = (payload: unknown): RazorpayOrderResponse | null => {
+  if (isValidOrder(payload)) {
+    return payload;
+  }
+
+  if (payload && typeof payload === 'object' && 'order' in payload && isValidOrder((payload as OrderApiResponse).order)) {
+    const { order, key } = payload as OrderApiResponse;
+    return { ...order!, key: key ?? order?.key };
+  }
+
+  return null;
+};
+
 const REELS_VFX_ADD_ON_INR = 400;
 
 const ServiceDetail = () => {
@@ -235,13 +261,15 @@ const ServiceDetail = () => {
         throw new Error('Unable to initiate payment. Please try again later.');
       }
 
-      const order: RazorpayOrderResponse = await response.json();
+      const payload: OrderApiResponse | null = await response.json().catch(() => null);
+      const order = extractOrder(payload);
 
-      if (!order?.id || !order?.amount || !order?.currency) {
-        throw new Error('Received an invalid order response. Please try again later.');
+      if (!order) {
+        const apiError = payload?.error || payload?.message;
+        throw new Error(apiError || 'Received an invalid order response. Please try again later.');
       }
 
-      const resolvedKey = order.key ?? RAZORPAY_KEY_ID;
+      const resolvedKey = order.key ?? payload?.key ?? RAZORPAY_KEY_ID;
 
       if (!resolvedKey) {
         throw new Error('Payment gateway is not configured. Please try again later.');
