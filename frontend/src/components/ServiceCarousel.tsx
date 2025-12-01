@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 import type { ServiceCategory, SubService } from '../data/services';
 import SubServiceCard from './SubServiceCard';
-import './ServiceCarousel.css';
 
 type Props = {
   category: ServiceCategory;

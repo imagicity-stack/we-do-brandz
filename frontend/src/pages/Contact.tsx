@@ -1,5 +1,4 @@
 import ContactForm from '../components/ContactForm';
-import './Contact.css';
 import { useMetaPageEvents } from '../hooks/useMetaPageEvents';
 
 const Contact = () => {

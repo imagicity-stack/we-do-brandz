@@ -1,6 +1,5 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useLocalePath } from '../hooks/useLocalePath';
-import './Hero.css';
 
 export const Hero = () => {
   const buildPath = useLocalePath();

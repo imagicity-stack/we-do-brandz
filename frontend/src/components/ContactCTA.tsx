@@ -1,6 +1,5 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useLocalePath } from '../hooks/useLocalePath';
-import './ContactCTA.css';
 
 export const ContactCTA = () => {
   const buildPath = useLocalePath();
@@ -14,7 +13,7 @@ export const ContactCTA = () => {
             Share your growth goals, current challenges, and we&apos;ll map a roadmap tailored to your brand.
           </p>
         </div>
-        <Link to={buildPath('/contact')} className="primary-button">
+        <Link href={buildPath('/contact')} className="primary-button">
           Book a call
         </Link>
       </div>

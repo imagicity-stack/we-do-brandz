@@ -1,9 +1,8 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useLocale } from '../context/LocaleContext';
 import type { ServiceCategory, SubService } from '../data/services';
 import { useLocalePath } from '../hooks/useLocalePath';
 import { localizePriceLabel } from '../utils/currency';
-import './SubServiceCard.css';
 
 interface Props {
   category: ServiceCategory;
@@ -34,7 +33,7 @@ export const SubServiceCard = ({ category, service }: Props) => {
           <span className="timeline">{service.deliveryTimeline}</span>
           {service.priceNote && <small>{localizePriceLabel(locale, service.priceNote)}</small>}
         </div>
-        <Link to={buildPath(`/services/${category.slug}/${service.slug}`)} className="primary-button">
+        <Link href={buildPath(`/services/${category.slug}/${service.slug}`)} className="primary-button">
           Book now
         </Link>
       </div>

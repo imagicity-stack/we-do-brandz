@@ -1,4 +1,3 @@
-import './PolicyPage.css';
 import { useMetaPageEvents } from '../hooks/useMetaPageEvents';
 
 const PrivacyPolicy = () => {

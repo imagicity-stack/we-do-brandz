@@ -1,7 +1,6 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { serviceCategories } from '../data/services';
 import { useLocalePath } from '../hooks/useLocalePath';
-import './ServiceHighlights.css';
 
 export const ServiceHighlights = () => {
   const buildPath = useLocalePath();
@@ -27,7 +26,7 @@ export const ServiceHighlights = () => {
                   </span>
                 ))}
               </div>
-              <Link to={`${servicesPath}#${category.slug}`} className="text-link">
+              <Link href={`${servicesPath}#${category.slug}`} className="text-link">
                 View deliverables
               </Link>
             </div>
