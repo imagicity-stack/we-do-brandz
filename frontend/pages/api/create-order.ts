@@ -42,7 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const order = await razorpay.orders.create({
       amount,
       currency,
-      payment_capture: 1,
+      payment_capture: true,
       notes: {
         name,
         email,
