@@ -1,10 +1,9 @@
+import { useRouter } from 'next/router';
 import { FormEvent, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { serviceCategories } from '../data/services';
 import { useLocalePath } from '../hooks/useLocalePath';
 import { trackMetaEvent } from '../utils/metaPixel';
 import { trackAnalyticsEvent } from '../utils/analytics';
-import './SearchBar.css';
 
 type SearchSuggestion = {
   id: string;
@@ -46,7 +45,7 @@ const buildSuggestions = (query: string): SearchSuggestion[] => {
 export const SearchBar = ({ onNavigate, autoFocus }: Props) => {
   const [query, setQuery] = useState('');
   const [isFocused, setIsFocused] = useState(false);
-  const navigate = useNavigate();
+  const router = useRouter();
   const buildPath = useLocalePath();
 
   const suggestions = useMemo(() => buildSuggestions(query), [query]);
@@ -66,14 +65,14 @@ export const SearchBar = ({ onNavigate, autoFocus }: Props) => {
     if (!term) return;
 
     sendTracking(term, 'submit');
-    navigate(buildPath(`/services?q=${encodeURIComponent(term)}`));
+    router.push(buildPath(`/services?q=${encodeURIComponent(term)}`));
     onNavigate?.();
     setIsFocused(false);
   };
 
   const handleSuggestionSelect = (suggestion: SearchSuggestion) => {
     sendTracking(query || suggestion.label, 'suggestion_select');
-    navigate(buildPath(suggestion.path));
+    router.push(buildPath(suggestion.path));
     setQuery('');
     onNavigate?.();
     setIsFocused(false);

@@ -1,15 +1,19 @@
+import { useRouter } from 'next/router';
 import { useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { serviceCategories } from '../data/services';
 import ServiceCarousel from '../components/ServiceCarousel';
-import './Services.css';
 import { useMetaPageEvents } from '../hooks/useMetaPageEvents';
 
 const Services = () => {
   useMetaPageEvents('Services', { params: { content_category: 'Services Overview' } });
 
-  const [searchParams] = useSearchParams();
-  const searchTerm = (searchParams.get('q') || '').trim().toLowerCase();
+  const router = useRouter();
+  const searchTerm = useMemo(() => {
+    const queryParam = router.query.q;
+    if (typeof queryParam === 'string') return queryParam.trim().toLowerCase();
+    if (Array.isArray(queryParam)) return (queryParam[0] || '').trim().toLowerCase();
+    return '';
+  }, [router.query.q]);
   const hasSearch = searchTerm.length > 0;
 
   const filteredCategories = useMemo(

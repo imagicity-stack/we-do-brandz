@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useMemo, useState } from 'react';
 import SearchBar from './SearchBar';
 import { useLocalePath } from '../hooks/useLocalePath';
-import './Header.css';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -15,21 +15,21 @@ const navLinks = [
 export const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const location = useLocation();
   const buildPath = useLocalePath();
+  const router = useRouter();
+  const pathname = useMemo(() => router.asPath.split('?')[0], [router.asPath]);
 
   useEffect(() => {
     setIsNavOpen(false);
     setIsSearchOpen(false);
-  }, [location.pathname]);
+  }, [pathname]);
 
-  const isActive = (path: string) =>
-    location.pathname === buildPath(path) || location.pathname.startsWith(`${buildPath(path)}/`);
+  const isActive = (path: string) => pathname === buildPath(path) || pathname.startsWith(`${buildPath(path)}/`);
 
   return (
     <header className="header">
       <div className="main-container header-inner">
-        <Link to={buildPath('/')} className="logo" aria-label="We do Brandz home">
+        <Link href={buildPath('/')} className="logo" aria-label="We do Brandz home">
           <img src="/logo.svg" alt="We do Brandz" className="logo-image" />
         </Link>
 
@@ -37,7 +37,7 @@ export const Header = () => {
           {navLinks.map((link) => (
             <Link
               key={link.href}
-              to={buildPath(link.href)}
+              href={buildPath(link.href)}
               className={`nav-link ${isActive(link.href) ? 'active' : ''}`}
             >
               {link.label}

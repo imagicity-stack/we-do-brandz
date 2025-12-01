@@ -1,8 +1,7 @@
+import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { useLocale } from '../context/LocaleContext';
 import { Locale, SUPPORTED_LOCALES } from '../utils/locale';
-import './LocationPrompt.css';
 
 const buildSwitchPath = (pathname: string, targetLocale: Locale) => {
   const segments = pathname.split('/').filter(Boolean);
@@ -15,8 +14,8 @@ const buildSwitchPath = (pathname: string, targetLocale: Locale) => {
 
 export const LocationPrompt = () => {
   const locale = useLocale();
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const router = useRouter();
+  const pathname = useMemo(() => router.asPath.split('?')[0], [router.asPath]);
   const [isVisible, setIsVisible] = useState(true);
   const [selectedLocale, setSelectedLocale] = useState<Locale>(locale);
 
@@ -32,7 +31,7 @@ export const LocationPrompt = () => {
       return;
     }
     setIsVisible(false);
-    navigate(targetPath, { replace: true });
+    router.replace(targetPath);
   };
 
   if (!isVisible) {

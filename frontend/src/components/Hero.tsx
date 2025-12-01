@@ -1,6 +1,5 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useLocalePath } from '../hooks/useLocalePath';
-import './Hero.css';
 
 export const Hero = () => {
   const buildPath = useLocalePath();
@@ -15,10 +14,10 @@ export const Hero = () => {
             engines that convert attention into loyal customers.
           </p>
           <div className="hero-actions">
-            <Link to={buildPath('/services')} className="primary-button">
+            <Link href={buildPath('/services')} className="primary-button">
               Explore Services
             </Link>
-            <Link to={buildPath('/contact')} className="secondary-button">
+            <Link href={buildPath('/contact')} className="secondary-button">
               Book a Discovery Call
             </Link>
           </div>

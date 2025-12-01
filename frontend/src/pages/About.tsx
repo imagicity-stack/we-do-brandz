@@ -1,4 +1,3 @@
-import './About.css';
 import { useMetaPageEvents } from '../hooks/useMetaPageEvents';
 
 const About = () => {
