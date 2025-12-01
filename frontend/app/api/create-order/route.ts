@@ -10,16 +10,36 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "A numeric amount is required" }, { status: 400 });
     }
 
-    if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+    const publicKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+    const privateKeyId = process.env.RAZORPAY_KEY_ID;
+    const privateKeySecret = process.env.RAZORPAY_KEY_SECRET;
+
+    if (!publicKey || !privateKeyId || !privateKeySecret) {
       return NextResponse.json(
         { error: "Razorpay environment variables are missing" },
         { status: 500 }
       );
     }
 
+    const modeForKey = (key: string) => {
+      if (key.startsWith("rzp_test_")) return "test" as const;
+      if (key.startsWith("rzp_live_")) return "live" as const;
+      return "unknown" as const;
+    };
+
+    const publicMode = modeForKey(publicKey);
+    const privateMode = modeForKey(privateKeyId);
+
+    if (publicMode !== "unknown" && privateMode !== "unknown" && publicMode !== privateMode) {
+      return NextResponse.json(
+        { error: "Razorpay keys must use the same mode (test or live)." },
+        { status: 500 }
+      );
+    }
+
     const razorpay = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY_ID,
-      key_secret: process.env.RAZORPAY_KEY_SECRET
+      key_id: privateKeyId,
+      key_secret: privateKeySecret
     });
 
     const order = await razorpay.orders.create({
@@ -29,13 +49,13 @@ export async function POST(request: NextRequest) {
       notes
     });
 
+    console.log("order created:", order);
+
     return NextResponse.json({
       id: order.id,
       amount: order.amount,
       currency: order.currency,
-      status: order.status,
-      receipt: order.receipt,
-      key: process.env.RAZORPAY_KEY_ID
+      key: publicKey
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
