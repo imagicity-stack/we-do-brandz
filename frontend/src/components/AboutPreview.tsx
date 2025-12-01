@@ -1,6 +1,5 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useLocalePath } from '../hooks/useLocalePath';
-import './AboutPreview.css';
 
 export const AboutPreview = () => {
   const buildPath = useLocalePath();
@@ -14,7 +13,7 @@ export const AboutPreview = () => {
             Our in-house team of brand strategists, designers, developers, and media specialists build high-performing funnels
             tailored to your goals. From identity design to paid acquisition, we ship tangible outcomes.
           </p>
-          <Link to={buildPath('/about')} className="primary-button">
+          <Link href={buildPath('/about')} className="primary-button">
             Learn about our approach
           </Link>
         </div>

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { faqs } from '../data/faqs';
-import './FAQ.css';
 import { useMetaPageEvents } from '../hooks/useMetaPageEvents';
 
 const FAQ = () => {

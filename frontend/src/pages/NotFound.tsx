@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom';
-import './NotFound.css';
+import Link from 'next/link';
 import { useMetaPageEvents } from '../hooks/useMetaPageEvents';
 
 interface Props {
@@ -18,10 +17,10 @@ const NotFound = ({ homePath = '/', servicesPath = '/services' }: Props) => {
           <h1>Page not found</h1>
           <p>The page you&apos;re looking for has moved or no longer exists. Let&apos;s get you back on track.</p>
           <div className="not-found-actions">
-            <Link to={homePath} className="primary-button">
+            <Link href={homePath} className="primary-button">
               Go home
             </Link>
-            <Link to={servicesPath} className="secondary-button">
+            <Link href={servicesPath} className="secondary-button">
               Browse services
             </Link>
           </div>

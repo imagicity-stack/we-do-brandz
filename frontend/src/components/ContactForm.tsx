@@ -1,5 +1,4 @@
 import { FormEvent, useState } from 'react';
-import './ContactForm.css';
 import { trackMetaEvent } from '../utils/metaPixel';
 
 interface FormState {

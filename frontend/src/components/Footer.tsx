@@ -1,6 +1,5 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useLocalePath } from '../hooks/useLocalePath';
-import './Footer.css';
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -18,9 +17,9 @@ export const Footer = () => {
         <div className="footer-links">
           <h4>Policies</h4>
           <div className="policy-links">
-            <Link to={buildPath('/privacy-policy')}>Privacy Policy</Link>
-            <Link to={buildPath('/terms-and-conditions')}>Terms and Conditions</Link>
-            <Link to={buildPath('/refund-and-return-policy')}>Refund and Return Policy</Link>
+            <Link href={buildPath('/privacy-policy')}>Privacy Policy</Link>
+            <Link href={buildPath('/terms-and-conditions')}>Terms and Conditions</Link>
+            <Link href={buildPath('/refund-and-return-policy')}>Refund and Return Policy</Link>
           </div>
         </div>
       </div>

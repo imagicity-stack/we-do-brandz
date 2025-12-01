@@ -1,5 +1,5 @@
+import { useRouter } from 'next/router';
 import { FormEvent, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import { useLocale } from '../context/LocaleContext';
 import { findSubService } from '../data/services';
 import { useLocalePath } from '../hooks/useLocalePath';
@@ -7,7 +7,6 @@ import { useRazorpay } from '../hooks/useRazorpay';
 import { formatCurrency, getCheckoutAmount, localizePriceLabel } from '../utils/currency';
 import { useMetaPageEvents } from '../hooks/useMetaPageEvents';
 import { trackMetaEvent } from '../utils/metaPixel';
-import './ServiceDetail.css';
 
 type BookingFormState = {
   name: string;
@@ -27,8 +26,8 @@ const initialFormState: BookingFormState = {
   acceptedTerms: false
 };
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'https://brandz-back.onrender.com';
-const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID ?? 'rzp_live_ReprOUvcLlsQpx';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'https://brandz-back.onrender.com';
+const RAZORPAY_KEY_ID = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ?? 'rzp_live_ReprOUvcLlsQpx';
 
 type RazorpayOrderResponse = {
   id: string;
@@ -42,10 +41,16 @@ const REELS_VFX_ADD_ON_INR = 400;
 const ServiceDetail = () => {
   const locale = useLocale();
   const buildPath = useLocalePath();
-  const params = useParams<{ serviceSlug: string; subServiceSlug: string }>();
-  const navigate = useNavigate();
-  const { serviceSlug = '', subServiceSlug = '' } = params;
-  const match = useMemo(() => findSubService(serviceSlug, subServiceSlug), [serviceSlug, subServiceSlug]);
+  const router = useRouter();
+  const serviceSlugParam = router.query.serviceSlug;
+  const subServiceSlugParam = router.query.subServiceSlug;
+  const serviceSlug = typeof serviceSlugParam === 'string' ? serviceSlugParam : '';
+  const subServiceSlug = typeof subServiceSlugParam === 'string' ? subServiceSlugParam : '';
+  const isReady = router.isReady && Boolean(serviceSlug) && Boolean(subServiceSlug);
+  const match = useMemo(
+    () => (isReady ? findSubService(serviceSlug, subServiceSlug) : null),
+    [isReady, serviceSlug, subServiceSlug]
+  );
   const isIndia = locale === 'in';
   const isUS = locale === 'us';
   const { openCheckout, isLoaded } = useRazorpay(isIndia);
@@ -68,15 +73,27 @@ const ServiceDetail = () => {
   const metaEventCurrency = locale === 'in' ? 'INR' : 'USD';
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'auto' });
-  }, [serviceSlug, subServiceSlug]);
+    if (isReady) {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }
+  }, [isReady, serviceSlug, subServiceSlug]);
 
   useMetaPageEvents(match?.subService.name ?? 'Service detail', {
     params: {
-        content_category: match?.category.name ?? 'Service detail',
-        ...(match ? { value: metaEventValue, currency: metaEventCurrency } : {})
+      content_category: match?.category.name ?? 'Service detail',
+      ...(match ? { value: metaEventValue, currency: metaEventCurrency } : {})
     }
   });
+
+  if (!isReady) {
+    return (
+      <main className="service-detail">
+        <section className="section">
+          <div className="main-container">Loading...</div>
+        </section>
+      </main>
+    );
+  }
 
   if (!match) {
     return (
@@ -86,7 +103,7 @@ const ServiceDetail = () => {
             <div className="card">
               <h1>Service not found</h1>
               <p>The service you are looking for is unavailable or has been moved.</p>
-              <button className="primary-button" onClick={() => navigate(buildPath('/services'))}>
+              <button className="primary-button" onClick={() => router.push(buildPath('/services'))}>
                 Back to services
               </button>
             </div>
