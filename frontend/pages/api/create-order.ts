@@ -45,6 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       amount: normalizedAmount,
       currency: typeof currency === 'string' ? currency.toUpperCase() : 'INR',
       payment_capture: true,
+      receipt: `wd-brandz-${Date.now()}`,
       notes: {
         name,
         email,
@@ -57,13 +58,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     });
 
-    const { id, amount: gatewayAmount, currency: gatewayCurrency } = order ?? {};
-
-    if (!id || !gatewayAmount || !gatewayCurrency) {
+    if (!order || typeof order !== 'object') {
       return res.status(502).json({ error: 'Payment gateway returned an invalid order response.' });
     }
 
-    res.status(200).json({ id, amount: Number(gatewayAmount), currency: gatewayCurrency, key: key_id });
+    const rawOrder = order as unknown as Partial<Record<'id' | 'amount' | 'currency' | 'status', unknown>>;
+    const { id, amount: gatewayAmount, currency: gatewayCurrency, status } = rawOrder;
+
+    if (status !== 'created') {
+      return res.status(502).json({ error: 'Payment gateway could not create the order. Please try again.' });
+    }
+
+    if (typeof id !== 'string' || !id || typeof gatewayAmount !== 'number' || !gatewayAmount || typeof gatewayCurrency !== 'string') {
+      return res.status(502).json({ error: 'Payment gateway returned an invalid order response.' });
+    }
+
+    res.status(200).json({ id, amount: gatewayAmount, currency: gatewayCurrency.toUpperCase(), key: key_id });
   } catch (error) {
     res
       .status(500)
