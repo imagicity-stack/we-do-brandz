@@ -37,8 +37,10 @@ app.use(
 );
 app.use(express.json());
 
+const razorpayKeyId = process.env.RAZORPAY_KEY_ID ?? 'rzp_live_ReprOUvcLlsQpx';
+
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID ?? 'rzp_live_ReprOUvcLlsQpx',
+  key_id: razorpayKeyId,
   key_secret: process.env.RAZORPAY_KEY_SECRET ?? 'rj0631Zd4SFgC2pKfcuTfhVV'
 });
 
@@ -97,7 +99,7 @@ app.post('/api/create-order', async (req, res) => {
       email
     });
 
-    res.json(order);
+    res.json({ ...order, key: razorpayKeyId });
   } catch (error) {
     logNote('Failed to create order', { error: error instanceof Error ? error.message : 'unknown' });
     res.status(500).json({ error: 'Unable to create Razorpay order.' });
