@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
 
 const REQUIRED_ENV = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS', 'SMTP_FROM'];
+const ALLOWED_FORM_TYPES = new Set(['contact', 'service-booking']);
 
 function assertEnv() {
   const missing = REQUIRED_ENV.filter((key) => !process.env[key]);
@@ -100,6 +101,10 @@ export default async function handler(req, res) {
   }
 
   const { formType = 'form', email } = payload;
+
+  if (!ALLOWED_FORM_TYPES.has(formType)) {
+    return res.status(400).json({ success: false, error: 'Unsupported form type' });
+  }
   const messagePayload = buildMessagePayload(formType, payload);
 
   try {
