@@ -1,4 +1,5 @@
 import { FormEvent, useState } from 'react';
+import { useLocale } from '../context/LocaleContext';
 import { CallRequestPayload } from '../utils/callRequest';
 import { getBasicValidationError } from '../utils/formValidation';
 import { trackMetaEvent } from '../utils/metaPixel';
@@ -20,6 +21,7 @@ const initialState: FormState = {
 };
 
 export const ContactForm = () => {
+  const locale = useLocale();
   const [form, setForm] = useState<FormState>(initialState);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -44,7 +46,7 @@ export const ContactForm = () => {
     page_url: window.location.href
   });
 
-  const validateForm = () => getBasicValidationError(form.name, form.phone, form.email);
+  const validateForm = () => getBasicValidationError(form.name, form.phone, form.email, locale);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();

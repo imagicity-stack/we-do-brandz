@@ -128,7 +128,7 @@ const ServiceDetail = () => {
   });
 
   const validateForm = () => {
-    const basicError = getBasicValidationError(form.name, form.contactNumber, form.email);
+    const basicError = getBasicValidationError(form.name, form.contactNumber, form.email, locale);
     if (basicError) {
       return basicError;
     }
