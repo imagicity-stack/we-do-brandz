@@ -38,6 +38,7 @@ Set these environment variables in the Vercel dashboard (Project Settings → En
 **Preview**, and **Development**:
 
 - `NEXT_PUBLIC_RAZORPAY_KEY_ID` – Razorpay key ID exposed to the client for checkout.
+- `NEXT_PUBLIC_N8N_WEBHOOK_GET_CALL_URL` – n8n webhook URL for "Get a CALL" form submissions.
 - `RAZORPAY_KEY_ID` – Same Razorpay key ID for the server-side order endpoint (optional if the public key is set).
 - `RAZORPAY_KEY_SECRET` – Razorpay key secret used to sign orders.
 - `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` – SMTP credentials for contact/booking emails.

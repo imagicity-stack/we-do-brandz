@@ -6,6 +6,8 @@ import { useLocalePath } from '../hooks/useLocalePath';
 import { formatCurrency, localizePriceLabel } from '../utils/currency';
 import { useMetaPageEvents } from '../hooks/useMetaPageEvents';
 import { trackMetaEvent } from '../utils/metaPixel';
+import { CallRequestPayload } from '../utils/callRequest';
+import { getBasicValidationError } from '../utils/formValidation';
 
 type BookingFormState = {
   name: string;
@@ -43,7 +45,10 @@ const ServiceDetail = () => {
   const [form, setForm] = useState<BookingFormState>(initialFormState);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [callError, setCallError] = useState<string | null>(null);
+  const [callSuccess, setCallSuccess] = useState<string | null>(null);
+  const [submittingAction, setSubmittingAction] = useState<null | 'email' | 'call'>(null);
+  const isSubmitting = submittingAction !== null;
   const [addVfx, setAddVfx] = useState(false);
   const isReelsEditing = match?.subService.slug === 'reels-editing';
   const totalAmountInINR = (match?.subService.priceInINR ?? 0) + (isReelsEditing && addVfx ? REELS_VFX_ADD_ON_INR : 0);
@@ -96,7 +101,7 @@ const ServiceDetail = () => {
   const { category, subService } = match;
   const localizedPriceLabel = localizePriceLabel(locale, subService.priceLabel);
   const localizedPriceNote = subService.priceNote ? localizePriceLabel(locale, subService.priceNote) : null;
-  const actionButtonLabel = 'Inquire now';
+  const actionButtonLabel = 'Inquire Now';
   const isActionDisabled = isSubmitting;
 
   useEffect(() => {
@@ -109,6 +114,30 @@ const ServiceDetail = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+  };
+
+  const buildCallPayload = (): CallRequestPayload => ({
+    name: form.name,
+    phone: form.contactNumber,
+    email: form.email,
+    category: category?.name ?? 'General',
+    sub_category: subService?.name ?? 'General',
+    message: form.message,
+    form_source: 'Website Service Form',
+    page_url: window.location.href
+  });
+
+  const validateForm = () => {
+    const basicError = getBasicValidationError(form.name, form.contactNumber, form.email, locale);
+    if (basicError) {
+      return basicError;
+    }
+
+    if (!form.acceptedTerms) {
+      return 'Please accept the terms and conditions to continue.';
+    }
+
+    return null;
   };
 
   const sendEmailSubmission = async () => {
@@ -154,13 +183,16 @@ const ServiceDetail = () => {
     event.preventDefault();
     setError(null);
     setSuccess(null);
+    setCallError(null);
+    setCallSuccess(null);
 
-    if (!form.acceptedTerms) {
-      setError('Please accept the terms and conditions to continue.');
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
-    setIsSubmitting(true);
+    setSubmittingAction('email');
 
     try {
       await sendEmailSubmission();
@@ -187,7 +219,54 @@ const ServiceDetail = () => {
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Unexpected error occurred.');
     } finally {
-      setIsSubmitting(false);
+      setSubmittingAction(null);
+    }
+  };
+
+  const handleCallRequest = async () => {
+    setError(null);
+    setSuccess(null);
+    setCallError(null);
+    setCallSuccess(null);
+
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    const webhookUrl = process.env.NEXT_PUBLIC_N8N_WEBHOOK_GET_CALL_URL;
+    if (!webhookUrl) {
+      setCallError('Unable to request a call right now. Please try again.');
+      return;
+    }
+
+    setSubmittingAction('call');
+
+    try {
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(buildCallPayload())
+      });
+
+      if (!response.ok) {
+        throw new Error('Unable to request a call right now. Please try again.');
+      }
+
+      setCallSuccess('Thank you. We will call you shortly.');
+      setForm(initialFormState);
+      setAddVfx(false);
+    } catch (submitError) {
+      setCallError(
+        submitError instanceof Error
+          ? submitError.message
+          : 'Unable to request a call right now. Please try again.'
+      );
+    } finally {
+      setSubmittingAction(null);
     }
   };
 
@@ -278,9 +357,9 @@ const ServiceDetail = () => {
                   value={form.message}
                   onInput={handleChange}
                   placeholder="Share goals, context, or campaign ideas"
-                  required
                 />
               </label>
+              <p className="form-helper">Message is optional but recommended.</p>
               {isReelsEditing && (
                 <label className="checkbox">
                   <input
@@ -312,10 +391,17 @@ const ServiceDetail = () => {
                 </span>
               </label>
               {error && <p className="form-error">{error}</p>}
-              <button className="primary-button" type="submit" disabled={isActionDisabled}>
-                {isSubmitting ? 'Processing…' : actionButtonLabel}
-              </button>
+              <div className="form-actions">
+                <button className="primary-button" type="submit" disabled={isActionDisabled}>
+                  {submittingAction === 'email' ? 'Processing…' : actionButtonLabel}
+                </button>
+                <button className="secondary-button" type="button" onClick={handleCallRequest} disabled={isActionDisabled}>
+                  {submittingAction === 'call' ? 'Requesting…' : 'Get a CALL'}
+                </button>
+              </div>
               {success && <p className="form-success">{success}</p>}
+              {callError && <p className="form-error">{callError}</p>}
+              {callSuccess && <p className="form-success">{callSuccess}</p>}
             </form>
           </div>
         </div>
