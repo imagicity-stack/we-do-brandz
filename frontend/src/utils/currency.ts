@@ -32,16 +32,3 @@ export const localizePriceLabel = (locale: Locale, label: string) => {
     return formatCurrency('us', amountInINR);
   });
 };
-
-export const getCheckoutAmount = (locale: Locale, amountInINR: number) => {
-  if (locale === 'in') {
-    return { amount: amountInINR * 100, currency: 'INR' as const };
-  }
-  const approxUSD = convertInrToAdjustedUsd(amountInINR);
-  return {
-    amount: Math.round(approxUSD * 100),
-    currency: 'USD' as const,
-    displayAmount: Number(approxUSD.toFixed(2)),
-    displayCurrency: 'USD' as const
-  };
-};
