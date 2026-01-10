@@ -50,9 +50,6 @@ function createEmailContent(payload) {
 
 function buildAmount(payload) {
   if (payload.totalAmountLabel) return payload.totalAmountLabel;
-  if (payload.checkoutDisplayAmount && payload.checkoutDisplayCurrency)
-    return `${payload.checkoutDisplayAmount} ${payload.checkoutDisplayCurrency}`;
-  if (payload.checkoutAmount && payload.checkoutCurrency) return `${payload.checkoutAmount} ${payload.checkoutCurrency}`;
   return payload.amount ?? payload.totalAmount ?? undefined;
 }
 
@@ -128,7 +125,7 @@ export default async function handler(req, res) {
 
     await transporter.sendMail({
       from: process.env.SMTP_FROM,
-      to: 'connect@wedobrandz.com',
+      to: 'contact@wedobrandz.com',
       subject: `New ${formType} submission`,
       text,
       html,

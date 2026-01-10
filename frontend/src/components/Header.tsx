@@ -29,10 +29,6 @@ export const Header = () => {
   return (
     <header className="header">
       <div className="main-container header-inner">
-        <Link href={buildPath('/')} className="logo" aria-label="We do Brandz home">
-          <img src="/logo.svg" alt="We do Brandz" className="logo-image" />
-        </Link>
-
         <nav className={`nav ${isNavOpen ? 'nav-open' : ''}`} aria-label="Primary">
           {navLinks.map((link) => (
             <Link

@@ -43,7 +43,7 @@ export const LocationPrompt = () => {
       <div className="location-prompt__content">
         <div>
           <p className="location-prompt__title">Is your location correct?</p>
-          <p className="location-prompt__subtitle">Choose your region to see the right pricing and checkout options.</p>
+          <p className="location-prompt__subtitle">Choose your region to see the right pricing and inquiry details.</p>
         </div>
         <div className="location-prompt__controls">
           <label>

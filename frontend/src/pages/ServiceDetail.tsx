@@ -3,8 +3,7 @@ import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { useLocale } from '../context/LocaleContext';
 import { findSubService } from '../data/services';
 import { useLocalePath } from '../hooks/useLocalePath';
-import { useRazorpay } from '../hooks/useRazorpay';
-import { formatCurrency, getCheckoutAmount, localizePriceLabel } from '../utils/currency';
+import { formatCurrency, localizePriceLabel } from '../utils/currency';
 import { useMetaPageEvents } from '../hooks/useMetaPageEvents';
 import { trackMetaEvent } from '../utils/metaPixel';
 
@@ -26,13 +25,6 @@ const initialFormState: BookingFormState = {
   acceptedTerms: false
 };
 
-type RazorpayOrderResponse = {
-  id: string;
-  amount: number;
-  currency: string;
-  key: string;
-};
-
 const REELS_VFX_ADD_ON_INR = 400;
 
 const ServiceDetail = () => {
@@ -48,9 +40,6 @@ const ServiceDetail = () => {
     () => (isReady ? findSubService(serviceSlug, subServiceSlug) : null),
     [isReady, serviceSlug, subServiceSlug]
   );
-  const isIndia = locale === 'in';
-  const isUS = locale === 'us';
-  const { openCheckout, isLoaded } = useRazorpay(isIndia);
   const [form, setForm] = useState<BookingFormState>(initialFormState);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -60,13 +49,7 @@ const ServiceDetail = () => {
   const totalAmountInINR = (match?.subService.priceInINR ?? 0) + (isReelsEditing && addVfx ? REELS_VFX_ADD_ON_INR : 0);
   const totalAmountLabel = formatCurrency(locale, totalAmountInINR);
   const addOnLabel = formatCurrency(locale, REELS_VFX_ADD_ON_INR);
-  const {
-    amount: checkoutAmount,
-    currency: checkoutCurrency,
-    displayAmount: checkoutDisplayAmount,
-    displayCurrency: checkoutDisplayCurrency
-  } = getCheckoutAmount(locale, totalAmountInINR);
-  const metaEventValue = locale === 'in' ? totalAmountInINR : checkoutDisplayAmount ?? totalAmountInINR;
+  const metaEventValue = totalAmountInINR;
   const metaEventCurrency = locale === 'in' ? 'INR' : 'USD';
 
   useEffect(() => {
@@ -113,10 +96,8 @@ const ServiceDetail = () => {
   const { category, subService } = match;
   const localizedPriceLabel = localizePriceLabel(locale, subService.priceLabel);
   const localizedPriceNote = subService.priceNote ? localizePriceLabel(locale, subService.priceNote) : null;
-  const paymentButtonLabel = isReelsEditing ? `Pay ${totalAmountLabel}` : `Pay ${localizedPriceLabel}`;
-  const actionButtonLabel = isUS ? 'Connect now' : paymentButtonLabel;
-  const isActionDisabled = isSubmitting || (isIndia && !isLoaded);
-  const showEmiNote = isIndia && subService.priceInINR > 1000;
+  const actionButtonLabel = 'Inquire now';
+  const isActionDisabled = isSubmitting;
 
   useEffect(() => {
     setAddVfx(false);
@@ -139,10 +120,6 @@ const ServiceDetail = () => {
       serviceName: subService.name,
       categoryName: category.name,
       totalAmountLabel,
-      checkoutAmount,
-      checkoutCurrency,
-      checkoutDisplayAmount,
-      checkoutDisplayCurrency,
       addVfx: isReelsEditing ? (addVfx ? 'yes' : 'no') : undefined,
       ...form
     };
@@ -200,87 +177,15 @@ const ServiceDetail = () => {
         userData
       );
 
-      if (isUS) {
-        trackMetaEvent('Contact', {
-          content_name: subService.name,
-          content_category: category.name
-        }, userData);
-        setSuccess('Thanks! Our team will connect with you shortly to complete your booking.');
-        setForm(initialFormState);
-        return;
-      }
-
-      const response = await fetch('/api/create-order', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: form.name,
-          contactNumber: form.contactNumber,
-          email: form.email,
-          brand: form.brand,
-          message: form.message,
-          serviceId: subService.id,
-          serviceName: subService.name,
-          categoryName: category.name,
-          amount: checkoutAmount,
-          currency: checkoutCurrency
-        })
-      });
-
-      const data = await response.json().catch(() => null);
-
-      if (!response.ok) {
-        throw new Error(data?.error || 'Unable to initiate payment. Please try again later.');
-      }
-
-      const order: RazorpayOrderResponse = data as RazorpayOrderResponse;
-
-      if (!order?.id || !order?.amount || !order?.currency || !order?.key) {
-        throw new Error('Received an invalid order response. Please try again later.');
-      }
-
-      const displayOptions =
-        checkoutDisplayCurrency && checkoutDisplayAmount
-          ? {
-              display_currency: checkoutDisplayCurrency,
-              display_amount: checkoutDisplayAmount
-            }
-          : {};
-
-      trackMetaEvent('InitiateCheckout', {
+      trackMetaEvent('Contact', {
         content_name: subService.name,
-        content_category: category.name,
-        value: metaEventValue,
-        currency: metaEventCurrency
+        content_category: category.name
       }, userData);
 
-      openCheckout({
-        key: order.key,
-        amount: order.amount,
-        currency: order.currency,
-        name: 'We do Brandz',
-        description: subService.name,
-        order_id: order.id,
-        ...displayOptions,
-        prefill: {
-          name: form.name,
-          email: form.email,
-          contact: form.contactNumber
-        },
-        notes: {
-          brand: form.brand,
-          message: form.message,
-          serviceId: subService.id,
-          addVfx: isReelsEditing && addVfx ? 'yes' : 'no'
-        },
-        theme: {
-          color: '#1f4bff'
-        }
-      });
-    } catch (checkoutError) {
-      setError(checkoutError instanceof Error ? checkoutError.message : 'Unexpected error occurred.');
+      setSuccess('Thanks! Our team will connect with you shortly to continue.');
+      setForm(initialFormState);
+    } catch (submitError) {
+      setError(submitError instanceof Error ? submitError.message : 'Unexpected error occurred.');
     } finally {
       setIsSubmitting(false);
     }
@@ -317,11 +222,9 @@ const ServiceDetail = () => {
             {localizedPriceNote && <p className="detail-note">{localizedPriceNote}</p>}
           </div>
           <div className="card detail-form-card">
-            <h2>Book this service</h2>
+            <h2>Inquire about this service</h2>
             <p>
-              {isIndia
-                ? 'Fill in your details and continue to secure payment via Razorpay checkout.'
-                : 'Share your details and we will connect with you to finalize payment and onboarding.'}
+              Share your details and we will connect with you to plan the next steps.
             </p>
             <form className="booking-form" onSubmit={handleSubmit}>
               <div className="form-grid">
@@ -409,7 +312,6 @@ const ServiceDetail = () => {
                 </span>
               </label>
               {error && <p className="form-error">{error}</p>}
-              {showEmiNote && <p className="form-note">EMI options available.</p>}
               <button className="primary-button" type="submit" disabled={isActionDisabled}>
                 {isSubmitting ? 'Processing…' : actionButtonLabel}
               </button>
