@@ -132,6 +132,13 @@ button {
   box-shadow: 0 12px 24px rgba(31, 75, 255, 0.25);
 }
 
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
 .scroll-to-top {
   position: fixed;
   right: 1.5rem;

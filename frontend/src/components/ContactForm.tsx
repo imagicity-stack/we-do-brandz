@@ -1,4 +1,6 @@
 import { FormEvent, useState } from 'react';
+import { CallRequestPayload } from '../utils/callRequest';
+import { getBasicValidationError } from '../utils/formValidation';
 import { trackMetaEvent } from '../utils/metaPixel';
 
 interface FormState {
@@ -21,18 +23,43 @@ export const ContactForm = () => {
   const [form, setForm] = useState<FormState>(initialState);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [callSuccess, setCallSuccess] = useState<string | null>(null);
+  const [callError, setCallError] = useState<string | null>(null);
+  const [submittingAction, setSubmittingAction] = useState<null | 'email' | 'call'>(null);
+  const isSubmitting = submittingAction !== null;
 
   const handleChange = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.currentTarget;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  const buildCallPayload = (): CallRequestPayload => ({
+    name: form.name,
+    phone: form.phone,
+    email: form.email,
+    category: 'General',
+    sub_category: 'General',
+    message: form.message,
+    form_source: 'Website Contact Form',
+    page_url: window.location.href
+  });
+
+  const validateForm = () => getBasicValidationError(form.name, form.phone, form.email);
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
     setSubmitted(false);
-    setIsSubmitting(true);
+    setCallSuccess(null);
+    setCallError(null);
+
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    setSubmittingAction('email');
 
     try {
       const response = await fetch('/api/send-email', {
@@ -68,7 +95,53 @@ export const ContactForm = () => {
           : 'Something went wrong while sending your request. Please try again.'
       );
     } finally {
-      setIsSubmitting(false);
+      setSubmittingAction(null);
+    }
+  };
+
+  const handleCallRequest = async () => {
+    setError(null);
+    setSubmitted(false);
+    setCallSuccess(null);
+    setCallError(null);
+
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    const webhookUrl = process.env.NEXT_PUBLIC_N8N_WEBHOOK_GET_CALL_URL;
+    if (!webhookUrl) {
+      setCallError('Unable to request a call right now. Please try again.');
+      return;
+    }
+
+    setSubmittingAction('call');
+
+    try {
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(buildCallPayload())
+      });
+
+      if (!response.ok) {
+        throw new Error('Unable to request a call right now. Please try again.');
+      }
+
+      setCallSuccess('Thank you. We will call you shortly.');
+      setForm(initialState);
+    } catch (submissionError) {
+      setCallError(
+        submissionError instanceof Error
+          ? submissionError.message
+          : 'Unable to request a call right now. Please try again.'
+      );
+    } finally {
+      setSubmittingAction(null);
     }
   };
 
@@ -94,13 +167,21 @@ export const ContactForm = () => {
       </div>
       <label>
         How can we help?
-        <textarea name="message" value={form.message} onInput={handleChange} required rows={4} placeholder="Tell us about your goals" />
+        <textarea name="message" value={form.message} onInput={handleChange} rows={4} placeholder="Tell us about your goals" />
       </label>
-      <button className="primary-button" type="submit" disabled={isSubmitting}>
-        {isSubmitting ? 'Sending…' : 'Submit inquiry'}
-      </button>
+      <p className="form-helper">Message is optional but recommended.</p>
+      <div className="form-actions">
+        <button className="primary-button" type="submit" disabled={isSubmitting}>
+          {submittingAction === 'email' ? 'Processing…' : 'Inquire Now'}
+        </button>
+        <button className="secondary-button" type="button" onClick={handleCallRequest} disabled={isSubmitting}>
+          {submittingAction === 'call' ? 'Requesting…' : 'Get a CALL'}
+        </button>
+      </div>
       {error && <p className="form-error">{error}</p>}
       {submitted && <p className="form-success">Thank you! We&apos;ll get in touch within one business day.</p>}
+      {callError && <p className="form-error">{callError}</p>}
+      {callSuccess && <p className="form-success">{callSuccess}</p>}
     </form>
   );
 };
