@@ -6,7 +6,7 @@ export interface SubService {
   deliverables: string[];
   deliveryTimeline: string;
   priceLabel: string;
-  priceInINR: number;
+  priceInUSD: number;
   priceNote?: string;
 }
 
@@ -39,8 +39,8 @@ export const serviceCategories: ServiceCategory[] = [
           'Includes final files for print & digital use'
         ],
         deliveryTimeline: 'Delivery: 3–5 days',
-        priceLabel: '₹2,999',
-        priceInINR: 2999
+        priceLabel: '$36',
+        priceInUSD: 36
       },
       {
         id: 'full-brand-kit',
@@ -53,8 +53,8 @@ export const serviceCategories: ServiceCategory[] = [
           'Includes business card & social media display design'
         ],
         deliveryTimeline: 'Delivery: 7–10 days',
-        priceLabel: '₹13,999',
-        priceInINR: 13999
+        priceLabel: '$169',
+        priceInUSD: 169
       },
       {
         id: 'rebranding',
@@ -67,8 +67,8 @@ export const serviceCategories: ServiceCategory[] = [
           'Updated logo + brand guidelines + rollout templates'
         ],
         deliveryTimeline: 'Delivery: 10–14 days',
-        priceLabel: '₹15,999',
-        priceInINR: 15999
+        priceLabel: '$193',
+        priceInUSD: 193
       },
       {
         id: 'business-collateral-design',
@@ -81,8 +81,8 @@ export const serviceCategories: ServiceCategory[] = [
           'Consistent look & feel across items'
         ],
         deliveryTimeline: 'Delivery: 2–4 days',
-        priceLabel: '₹899 per set',
-        priceInINR: 899,
+        priceLabel: '$11 per set',
+        priceInUSD: 11,
         priceNote: 'Pricing reflects each collateral set.'
       }
     ]
@@ -106,8 +106,8 @@ export const serviceCategories: ServiceCategory[] = [
           'Basic performance tracking & reporting'
         ],
         deliveryTimeline: 'Delivery: Setup in 2–3 days',
-        priceLabel: '₹6,000 (Ad spend extra)',
-        priceInINR: 6000,
+        priceLabel: '$72 (Ad spend extra)',
+        priceInUSD: 72,
         priceNote: 'Ad spend billed separately.'
       },
       {
@@ -121,8 +121,8 @@ export const serviceCategories: ServiceCategory[] = [
           'Weekly performance report'
         ],
         deliveryTimeline: 'Delivery: Setup in 2–4 days',
-        priceLabel: '₹6,000 (Ad spend extra)',
-        priceInINR: 6000,
+        priceLabel: '$72 (Ad spend extra)',
+        priceInUSD: 72,
         priceNote: 'Ad spend billed separately.'
       },
       {
@@ -136,8 +136,8 @@ export const serviceCategories: ServiceCategory[] = [
           'Monthly growth and strategy tracking'
         ],
         deliveryTimeline: 'Delivery: Monthly Ongoing',
-        priceLabel: '₹13,000/month (depends on volume)',
-        priceInINR: 13000,
+        priceLabel: '$157/month (depends on volume)',
+        priceInUSD: 157,
         priceNote: 'Pricing may vary based on volume requirements.'
       },
       {
@@ -151,8 +151,8 @@ export const serviceCategories: ServiceCategory[] = [
           'Competitor & trend analysis'
         ],
         deliveryTimeline: 'Delivery: 5–7 days',
-        priceLabel: '₹9,999',
-        priceInINR: 9999
+        priceLabel: '$120',
+        priceInUSD: 120
       },
       {
         id: 'digital-marketing-bundle',
@@ -165,8 +165,8 @@ export const serviceCategories: ServiceCategory[] = [
           'Ongoing optimization & weekly review'
         ],
         deliveryTimeline: 'Delivery: Monthly Ongoing',
-        priceLabel: '₹28,999/month (Ads Spend Extra)',
-        priceInINR: 28999,
+        priceLabel: '$349/month (Ads Spend Extra)',
+        priceInUSD: 349,
         priceNote: 'Ad spend not included in the fee.'
       }
     ]
@@ -190,8 +190,8 @@ export const serviceCategories: ServiceCategory[] = [
           'WhatsApp & call integration'
         ],
         deliveryTimeline: 'Delivery: 5–10 days',
-        priceLabel: '₹14,999',
-        priceInINR: 14999
+        priceLabel: '$181',
+        priceInUSD: 181
       },
       {
         id: 'ecommerce-website',
@@ -204,8 +204,8 @@ export const serviceCategories: ServiceCategory[] = [
           'Customer-friendly UI + training to operate'
         ],
         deliveryTimeline: 'Delivery: 15 days',
-        priceLabel: '₹19,999 (platform varies)',
-        priceInINR: 19999,
+        priceLabel: '$241 (platform varies)',
+        priceInUSD: 241,
         priceNote: 'Platform choice may impact pricing.'
       },
       {
@@ -219,8 +219,8 @@ export const serviceCategories: ServiceCategory[] = [
           'App designed with brand identity UI'
         ],
         deliveryTimeline: 'Delivery: 30–35 days',
-        priceLabel: '₹59,000',
-        priceInINR: 59000,
+        priceLabel: '$711',
+        priceInUSD: 711,
         priceNote: 'Integrations may adjust final pricing.'
       },
       {
@@ -234,8 +234,8 @@ export const serviceCategories: ServiceCategory[] = [
           'Optimized for ads'
         ],
         deliveryTimeline: 'Delivery: 3 days',
-        priceLabel: '₹5,999',
-        priceInINR: 5999
+        priceLabel: '$72',
+        priceInUSD: 72
       }
     ]
   },
@@ -258,8 +258,8 @@ export const serviceCategories: ServiceCategory[] = [
           'Brand color, fonts, and logo integration'
         ],
         deliveryTimeline: 'Delivery: 3 days',
-        priceLabel: '₹2,999 (per 10s video)',
-        priceInINR: 2999,
+        priceLabel: '$36 (per 10s video)',
+        priceInUSD: 36,
         priceNote: 'Pricing for a 10 second ad spot.'
       },
       {
@@ -273,8 +273,8 @@ export const serviceCategories: ServiceCategory[] = [
           'Suitable for reels/ads/YouTube shorts'
         ],
         deliveryTimeline: 'Delivery: 3–4 days per video',
-        priceLabel: '₹4,000',
-        priceInINR: 4000
+        priceLabel: '$48',
+        priceInUSD: 48
       },
       {
         id: 'reels-editing',
@@ -287,9 +287,9 @@ export const serviceCategories: ServiceCategory[] = [
           'Perfect for Instagram / Facebook growth'
         ],
         deliveryTimeline: 'Delivery: 2 days per video',
-        priceLabel: '₹800 per reel (+₹400 for VFX)',
-        priceInINR: 800,
-        priceNote: 'Add ₹400 for VFX-enhanced edits.'
+        priceLabel: '$10 per reel (+$5 for VFX)',
+        priceInUSD: 10,
+        priceNote: 'Add $5 for VFX-enhanced edits.'
       }
     ]
   }

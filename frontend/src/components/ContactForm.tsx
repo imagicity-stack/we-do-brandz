@@ -1,13 +1,14 @@
 import { FormEvent, useState } from 'react';
-import { useLocale } from '../context/LocaleContext';
 import { CallRequestPayload } from '../utils/callRequest';
 import { getBasicValidationError } from '../utils/formValidation';
 import { trackMetaEvent } from '../utils/metaPixel';
+import { formatInternationalPhone, PHONE_COUNTRY_OPTIONS } from '../utils/phone';
 
 interface FormState {
   name: string;
   email: string;
-  phone: string;
+  phoneCountry: string;
+  phoneNumber: string;
   company: string;
   message: string;
 }
@@ -15,13 +16,13 @@ interface FormState {
 const initialState: FormState = {
   name: '',
   email: '',
-  phone: '',
+  phoneCountry: PHONE_COUNTRY_OPTIONS[0]?.dialCode ?? '+1',
+  phoneNumber: '',
   company: '',
   message: ''
 };
 
 export const ContactForm = () => {
-  const locale = useLocale();
   const [form, setForm] = useState<FormState>(initialState);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,14 +31,16 @@ export const ContactForm = () => {
   const [submittingAction, setSubmittingAction] = useState<null | 'email' | 'call'>(null);
   const isSubmitting = submittingAction !== null;
 
-  const handleChange = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = event.currentTarget;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  const formattedPhone = formatInternationalPhone(form.phoneCountry, form.phoneNumber);
+
   const buildCallPayload = (): CallRequestPayload => ({
     name: form.name,
-    phone: form.phone,
+    phone: formattedPhone,
     email: form.email,
     category: 'General',
     sub_category: 'General',
@@ -46,7 +49,7 @@ export const ContactForm = () => {
     page_url: window.location.href
   });
 
-  const validateForm = () => getBasicValidationError(form.name, form.phone, form.email, locale);
+  const validateForm = () => getBasicValidationError(form.name, form.phoneNumber, form.phoneCountry, form.email);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -64,12 +67,21 @@ export const ContactForm = () => {
     setSubmittingAction('email');
 
     try {
+      const payload = {
+        formType: 'contact',
+        name: form.name,
+        email: form.email,
+        phone: formattedPhone,
+        company: form.company,
+        message: form.message
+      };
+
       const response = await fetch('/api/send-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ formType: 'contact', ...form })
+        body: JSON.stringify(payload)
       });
 
       if (!response.ok) {
@@ -81,7 +93,7 @@ export const ContactForm = () => {
       const lastName = rest.length ? rest.join(' ') : undefined;
       const userData = {
         email: form.email,
-        phone: form.phone,
+        phone: formattedPhone,
         firstName,
         lastName
       };
@@ -152,15 +164,31 @@ export const ContactForm = () => {
       <div className="form-grid">
         <label>
           Full Name
-          <input name="name" value={form.name} onInput={handleChange} required placeholder="Aditi Sharma" />
+          <input name="name" value={form.name} onInput={handleChange} required placeholder="Taylor Johnson" />
         </label>
         <label>
           Email Address
-          <input name="email" type="email" value={form.email} onInput={handleChange} required placeholder="aditi@brand.com" />
+          <input name="email" type="email" value={form.email} onInput={handleChange} required placeholder="taylor@brand.com" />
         </label>
         <label>
           Phone Number
-          <input name="phone" value={form.phone} onInput={handleChange} required placeholder="+91 91222 89578" />
+          <div className="phone-input">
+            <select name="phoneCountry" value={form.phoneCountry} onChange={handleChange} aria-label="Country code">
+              {PHONE_COUNTRY_OPTIONS.map((option) => (
+                <option key={option.code} value={option.dialCode}>
+                  {option.name} ({option.dialCode})
+                </option>
+              ))}
+            </select>
+            <input
+              name="phoneNumber"
+              value={form.phoneNumber}
+              onInput={handleChange}
+              required
+              inputMode="tel"
+              placeholder="555 123 4567"
+            />
+          </div>
         </label>
         <label>
           Company / Brand

@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext } from 'react';
 import type { Locale } from '../utils/locale';
 
-const LocaleContext = createContext<Locale>('in');
+const LocaleContext = createContext<Locale>('us');
 
 export const LocaleProvider = ({ value, children }: { value: Locale; children: ReactNode }) => (
   <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>

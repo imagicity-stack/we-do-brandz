@@ -1,30 +1,20 @@
-import type { Locale } from './locale';
-
 export const isValidEmail = (value: string) => /.+@.+\..+/.test(value.trim());
 
-const normalizePhone = (value: string) => value.replace(/[\s()-]/g, '');
+const normalizePhone = (value: string) => value.replace(/[^\d]/g, '');
 
-export const isValidIndianPhone = (value: string) => {
+export const isValidInternationalPhone = (dialCode: string, value: string) => {
   const normalized = normalizePhone(value);
-  return /^\+91\d{10}$/.test(normalized);
+  const safeDialCode = dialCode.startsWith('+') ? dialCode : `+${dialCode}`;
+  return /^\+\d{8,15}$/.test(`${safeDialCode}${normalized}`);
 };
 
-export const isValidUsPhone = (value: string) => {
-  const normalized = normalizePhone(value);
-  return /^\+1\d{10}$/.test(normalized);
-};
-
-export const getBasicValidationError = (name: string, phone: string, email: string, locale: Locale) => {
+export const getBasicValidationError = (name: string, phone: string, dialCode: string, email: string) => {
   if (!name.trim()) {
     return 'Please enter your name.';
   }
 
-  if (locale === 'us') {
-    if (!isValidUsPhone(phone)) {
-      return 'Please enter a valid U.S. phone number in the format +1XXXXXXXXXX.';
-    }
-  } else if (!isValidIndianPhone(phone)) {
-    return 'Please enter a valid Indian phone number in the format +91XXXXXXXXXX.';
+  if (!isValidInternationalPhone(dialCode, phone)) {
+    return 'Please enter a valid phone number with the selected country code.';
   }
 
   if (!isValidEmail(email)) {

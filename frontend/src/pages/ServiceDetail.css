@@ -84,6 +84,7 @@
 }
 
 .booking-form input,
+.booking-form select,
 .booking-form textarea {
   border-radius: 0.9rem;
   border: 1px solid rgba(12, 27, 51, 0.12);
@@ -97,10 +98,25 @@
 }
 
 .booking-form input:focus,
+.booking-form select:focus,
 .booking-form textarea:focus {
   outline: none;
   border-color: var(--brand-primary);
   box-shadow: 0 0 0 4px rgba(31, 75, 255, 0.12);
+}
+
+.booking-form .phone-input {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.booking-form .phone-input select {
+  min-width: 180px;
+}
+
+.booking-form .phone-input input {
+  flex: 1;
 }
 
 .checkbox {

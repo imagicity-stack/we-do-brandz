@@ -14,6 +14,10 @@ const About = () => {
             strategists, designers, developers, and media specialists co-create experiences that move audiences and grow market
             share.
           </p>
+          <p>
+            We Do Brandz is a part of Imagicity (an India-based startup marketing agency), and We Do Brandz is built to serve
+            people across the globe.
+          </p>
         </div>
       </section>
       <section className="section">

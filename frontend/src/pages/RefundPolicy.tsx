@@ -10,7 +10,7 @@ const RefundPolicy = () => {
       <p>Effective Date: November 2025</p>
       <p>Website: www.wedobrandz.com</p>
       <p>Contact Email: contact@wedobrandz.com</p>
-      <p>Phone: +91 91222 89578</p>
+      <p>Phone: +1 (415) 555-0198</p>
       <p>
         At We Do Brandz, a part of IMAGICITY, every project is handled with creativity, dedication, and clear communication.
         Since our services are custom-built to meet each client’s unique needs, our refund terms are structured to ensure
@@ -64,7 +64,7 @@ const RefundPolicy = () => {
       <h2>6. Contact Information</h2>
       <p>For queries or refund requests, please contact us:</p>
       <p>Email: contact@wedobrandz.com</p>
-      <p>Phone: +91 91222 89578</p>
+      <p>Phone: +1 (415) 555-0198</p>
       <p>Website: www.wedobrandz.com</p>
     </div>
   </main>

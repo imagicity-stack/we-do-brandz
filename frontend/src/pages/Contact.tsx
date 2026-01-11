@@ -18,15 +18,15 @@ const Contact = () => {
             <div className="contact-details">
               <div>
                 <h3>Office hours</h3>
-                <p>Monday to Saturday, 10 AM – 7 PM IST</p>
+                <p>Monday to Friday, 9 AM – 6 PM ET</p>
               </div>
               <div>
                 <h3>Email</h3>
                 <p>hello@wedobrandz.com</p>
               </div>
               <div>
-                <h3>WhatsApp</h3>
-                <p>+91 91222 89578</p>
+                <h3>Phone</h3>
+                <p>+1 (415) 555-0198</p>
               </div>
             </div>
           </div>

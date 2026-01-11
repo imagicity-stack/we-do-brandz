@@ -4,7 +4,7 @@ import Razorpay from "razorpay";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { amount, currency = "INR", receipt, notes = {} } = body ?? {};
+    const { amount, currency = "USD", receipt, notes = {} } = body ?? {};
 
     if (typeof amount !== "number" || Number.isNaN(amount)) {
       return NextResponse.json({ error: "A numeric amount is required" }, { status: 400 });

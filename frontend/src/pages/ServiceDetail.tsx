@@ -8,9 +8,11 @@ import { useMetaPageEvents } from '../hooks/useMetaPageEvents';
 import { trackMetaEvent } from '../utils/metaPixel';
 import { CallRequestPayload } from '../utils/callRequest';
 import { getBasicValidationError } from '../utils/formValidation';
+import { formatInternationalPhone, PHONE_COUNTRY_OPTIONS } from '../utils/phone';
 
 type BookingFormState = {
   name: string;
+  phoneCountry: string;
   contactNumber: string;
   email: string;
   brand: string;
@@ -20,6 +22,7 @@ type BookingFormState = {
 
 const initialFormState: BookingFormState = {
   name: '',
+  phoneCountry: PHONE_COUNTRY_OPTIONS[0]?.dialCode ?? '+1',
   contactNumber: '',
   email: '',
   brand: '',
@@ -27,7 +30,7 @@ const initialFormState: BookingFormState = {
   acceptedTerms: false
 };
 
-const REELS_VFX_ADD_ON_INR = 400;
+const REELS_VFX_ADD_ON_USD = 5;
 
 const ServiceDetail = () => {
   const locale = useLocale();
@@ -51,11 +54,11 @@ const ServiceDetail = () => {
   const isSubmitting = submittingAction !== null;
   const [addVfx, setAddVfx] = useState(false);
   const isReelsEditing = match?.subService.slug === 'reels-editing';
-  const totalAmountInINR = (match?.subService.priceInINR ?? 0) + (isReelsEditing && addVfx ? REELS_VFX_ADD_ON_INR : 0);
-  const totalAmountLabel = formatCurrency(locale, totalAmountInINR);
-  const addOnLabel = formatCurrency(locale, REELS_VFX_ADD_ON_INR);
-  const metaEventValue = totalAmountInINR;
-  const metaEventCurrency = locale === 'in' ? 'INR' : 'USD';
+  const totalAmountInUSD = (match?.subService.priceInUSD ?? 0) + (isReelsEditing && addVfx ? REELS_VFX_ADD_ON_USD : 0);
+  const totalAmountLabel = formatCurrency(totalAmountInUSD);
+  const addOnLabel = formatCurrency(REELS_VFX_ADD_ON_USD);
+  const metaEventValue = totalAmountInUSD;
+  const metaEventCurrency = 'USD';
 
   useEffect(() => {
     if (isReady) {
@@ -99,26 +102,28 @@ const ServiceDetail = () => {
   }
 
   const { category, subService } = match;
-  const localizedPriceLabel = localizePriceLabel(locale, subService.priceLabel);
-  const localizedPriceNote = subService.priceNote ? localizePriceLabel(locale, subService.priceNote) : null;
+  const localizedPriceLabel = localizePriceLabel(subService.priceLabel);
+  const localizedPriceNote = subService.priceNote ? localizePriceLabel(subService.priceNote) : null;
   const actionButtonLabel = 'Inquire Now';
   const isActionDisabled = isSubmitting;
+  const formattedContactNumber = formatInternationalPhone(form.phoneCountry, form.contactNumber);
 
   useEffect(() => {
     setAddVfx(false);
   }, [subService.id]);
 
-  const handleChange = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type, checked } = event.currentTarget as HTMLInputElement;
+  const handleChange = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = event.currentTarget;
+    const isCheckbox = event.currentTarget instanceof HTMLInputElement && event.currentTarget.type === 'checkbox';
     setForm((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: isCheckbox ? event.currentTarget.checked : value
     }));
   };
 
   const buildCallPayload = (): CallRequestPayload => ({
     name: form.name,
-    phone: form.contactNumber,
+    phone: formattedContactNumber,
     email: form.email,
     category: category?.name ?? 'General',
     sub_category: subService?.name ?? 'General',
@@ -128,7 +133,7 @@ const ServiceDetail = () => {
   });
 
   const validateForm = () => {
-    const basicError = getBasicValidationError(form.name, form.contactNumber, form.email, locale);
+    const basicError = getBasicValidationError(form.name, form.contactNumber, form.phoneCountry, form.email);
     if (basicError) {
       return basicError;
     }
@@ -150,7 +155,11 @@ const ServiceDetail = () => {
       categoryName: category.name,
       totalAmountLabel,
       addVfx: isReelsEditing ? (addVfx ? 'yes' : 'no') : undefined,
-      ...form
+      contactNumber: formattedContactNumber,
+      name: form.name,
+      email: form.email,
+      brand: form.brand,
+      message: form.message
     };
 
     const response = await fetch('/api/send-email', {
@@ -173,7 +182,7 @@ const ServiceDetail = () => {
 
     return {
       email: form.email || undefined,
-      phone: form.contactNumber || undefined,
+      phone: formattedContactNumber || undefined,
       firstName,
       lastName
     };
@@ -319,13 +328,28 @@ const ServiceDetail = () => {
                 </label>
                 <label>
                   Contact Number
-                  <input
-                    name="contactNumber"
-                    value={form.contactNumber}
-                    onInput={handleChange}
-                    required
-                    placeholder="Mobile or WhatsApp"
-                  />
+                  <div className="phone-input">
+                    <select
+                      name="phoneCountry"
+                      value={form.phoneCountry}
+                      onChange={handleChange}
+                      aria-label="Country code"
+                    >
+                      {PHONE_COUNTRY_OPTIONS.map((option) => (
+                        <option key={option.code} value={option.dialCode}>
+                          {option.name} ({option.dialCode})
+                        </option>
+                      ))}
+                    </select>
+                    <input
+                      name="contactNumber"
+                      value={form.contactNumber}
+                      onInput={handleChange}
+                      required
+                      inputMode="tel"
+                      placeholder="555 123 4567"
+                    />
+                  </div>
                 </label>
                 <label>
                   Email ID
