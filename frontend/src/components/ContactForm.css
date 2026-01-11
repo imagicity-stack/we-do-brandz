@@ -42,17 +42,21 @@
 }
 
 .phone-input {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(180px, 220px) 1fr;
   gap: 0.75rem;
   align-items: center;
 }
 
-.phone-input select {
-  min-width: 180px;
+.phone-input select,
+.phone-input input {
+  width: 100%;
 }
 
-.phone-input input {
-  flex: 1;
+@media (max-width: 640px) {
+  .phone-input {
+    grid-template-columns: 1fr;
+  }
 }
 
 .form-success {

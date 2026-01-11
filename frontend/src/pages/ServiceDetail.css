@@ -106,17 +106,21 @@
 }
 
 .booking-form .phone-input {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(180px, 220px) 1fr;
   gap: 0.75rem;
   align-items: center;
 }
 
-.booking-form .phone-input select {
-  min-width: 180px;
+.booking-form .phone-input select,
+.booking-form .phone-input input {
+  width: 100%;
 }
 
-.booking-form .phone-input input {
-  flex: 1;
+@media (max-width: 640px) {
+  .booking-form .phone-input {
+    grid-template-columns: 1fr;
+  }
 }
 
 .checkbox {
