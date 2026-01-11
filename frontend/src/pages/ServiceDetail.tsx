@@ -113,11 +113,13 @@ const ServiceDetail = () => {
   }, [subService.id]);
 
   const handleChange = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = event.currentTarget;
-    const isCheckbox = event.currentTarget instanceof HTMLInputElement && event.currentTarget.type === 'checkbox';
+    const target = event.currentTarget;
+    const { name, value } = target;
+    const isCheckbox = (target as HTMLInputElement).type === 'checkbox';
+    const checked = (target as HTMLInputElement).checked;
     setForm((prev) => ({
       ...prev,
-      [name]: isCheckbox ? event.currentTarget.checked : value
+      [name]: isCheckbox ? checked : value
     }));
   };
 
