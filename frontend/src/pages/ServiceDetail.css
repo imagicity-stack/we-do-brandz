@@ -107,14 +107,43 @@
 
 .booking-form .phone-input {
   display: grid;
-  grid-template-columns: minmax(180px, 220px) 1fr;
+  grid-template-columns: minmax(110px, 140px) 1fr;
   gap: 0.75rem;
   align-items: center;
 }
 
-.booking-form .phone-input select,
 .booking-form .phone-input input {
   width: 100%;
+}
+
+.booking-form .phone-code {
+  position: relative;
+  width: 100%;
+}
+
+.booking-form .phone-code span {
+  display: block;
+  width: 100%;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(12, 27, 51, 0.12);
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-family: inherit;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--brand-secondary);
+}
+
+.booking-form .phone-code select {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.booking-form .phone-code:focus-within span {
+  outline: none;
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 4px rgba(31, 75, 255, 0.12);
 }
 
 @media (max-width: 640px) {

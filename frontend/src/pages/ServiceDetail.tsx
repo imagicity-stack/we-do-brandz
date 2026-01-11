@@ -331,18 +331,21 @@ const ServiceDetail = () => {
                 <label>
                   Contact Number
                   <div className="phone-input">
-                    <select
-                      name="phoneCountry"
-                      value={form.phoneCountry}
-                      onChange={handleChange}
-                      aria-label="Country code"
-                    >
-                      {PHONE_COUNTRY_OPTIONS.map((option) => (
-                        <option key={option.code} value={option.dialCode}>
-                          {option.name} ({option.dialCode})
-                        </option>
-                      ))}
-                    </select>
+                    <div className="phone-code">
+                      <span aria-hidden="true">{form.phoneCountry}</span>
+                      <select
+                        name="phoneCountry"
+                        value={form.phoneCountry}
+                        onChange={handleChange}
+                        aria-label="Country"
+                      >
+                        {PHONE_COUNTRY_OPTIONS.map((option) => (
+                          <option key={option.code} value={option.dialCode}>
+                            {option.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                     <input
                       name="contactNumber"
                       value={form.contactNumber}
