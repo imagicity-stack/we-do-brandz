@@ -10,7 +10,7 @@ const TermsAndConditions = () => {
       <p>Effective Date: November 2025</p>
       <p>Website: www.wedobrandz.com</p>
       <p>Contact Email: contact@wedobrandz.com</p>
-      <p>Phone: +91 91222 89578</p>
+      <p>Phone: +1 (415) 555-0198</p>
       <p>
         Welcome to We Do Brandz, a creative marketing and design agency under IMAGICITY. By accessing or using our website and
         services, you agree to the following Terms and Conditions. Please read them carefully before proceeding.
@@ -69,11 +69,11 @@ const TermsAndConditions = () => {
         updates means you accept the revised terms.
       </p>
       <h2>9. Governing Law</h2>
-      <p>These Terms shall be governed by and interpreted under the laws of India, with exclusive jurisdiction in Hazaribagh, Jharkhand.</p>
+      <p>These Terms shall be governed by and interpreted under the laws of the United States and the State of Delaware.</p>
       <h2>10. Contact Information</h2>
       <p>For any questions regarding these Terms, contact us at:</p>
       <p>Email: contact@wedobrandz.com</p>
-      <p>Phone: +91 91222 89578</p>
+      <p>Phone: +1 (415) 555-0198</p>
       <p>Website: www.wedobrandz.com</p>
     </div>
   </main>

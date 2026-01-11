@@ -15,9 +15,9 @@ export const faqs: FAQItem[] = [
       'Absolutely. Our team often bundles brand identity, web development, and ongoing marketing retainers so you have one integrated squad. We can structure retainers or project-based engagements.'
   },
   {
-    question: 'How does the Razorpay payment process work?',
+    question: 'How does the payment process work?',
     answer:
-      'When you book a service, you will fill in your brand details. We create a secure Razorpay order and redirect you to complete payment. You will receive a confirmation receipt via email instantly.'
+      'After you book a service, you will fill in your brand details. We generate a secure payment request so you can complete checkout, and you receive a confirmation receipt via email instantly.'
   },
   {
     question: 'Do you work with startups and established enterprises?',

@@ -10,7 +10,7 @@ const PrivacyPolicy = () => {
         <p>Effective Date: November 2025</p>
         <p>Website: www.wedobrandz.com</p>
         <p>Contact Email: contact@wedobrandz.com</p>
-        <p>Phone: +91 91222 89578</p>
+        <p>Phone: +1 (415) 555-0198</p>
         <p>
           We Do Brandz (“we,” “our,” or “us”) is committed to protecting your privacy. This Privacy Policy explains how we
           collect, use, and safeguard your information when you visit our website or engage our services.
@@ -74,7 +74,7 @@ const PrivacyPolicy = () => {
         <h2>9. Contact Us</h2>
         <p>For privacy-related questions, contact us at:</p>
         <p>Email: contact@wedobrandz.com</p>
-        <p>Phone: +91 91222 89578</p>
+        <p>Phone: +1 (415) 555-0198</p>
         <p>Website: www.wedobrandz.com</p>
       </div>
     </main>

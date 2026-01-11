@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import Footer from '../src/components/Footer';
 import Header from '../src/components/Header';
-import LocationPrompt from '../src/components/LocationPrompt';
 import ScrollToTopButton from '../src/components/ScrollToTopButton';
 import { LocaleProvider } from '../src/context/LocaleContext';
 import { detectLocale, isLocale, Locale } from '../src/utils/locale';
@@ -16,7 +15,6 @@ import '../src/components/ContactForm.css';
 import '../src/components/Footer.css';
 import '../src/components/Header.css';
 import '../src/components/Hero.css';
-import '../src/components/LocationPrompt.css';
 import '../src/components/SearchBar.css';
 import '../src/components/ServiceCarousel.css';
 import '../src/components/ServiceHighlights.css';
@@ -46,7 +44,6 @@ const MetaPixelTracker = () => {
 const AppLayout = ({ children, locale }: { children: ReactNode; locale: Locale }) => (
   <LocaleProvider value={locale}>
     <MetaPixelTracker />
-    <LocationPrompt />
     <Header />
     {children}
     <Footer />
@@ -56,7 +53,7 @@ const AppLayout = ({ children, locale }: { children: ReactNode; locale: Locale }
 
 function MyApp({ Component, pageProps }: AppProps<{ locale?: Locale }>) {
   const router = useRouter();
-  const [locale, setLocale] = useState<Locale>('in');
+  const [locale, setLocale] = useState<Locale>('us');
 
   useEffect(() => {
     const localeFromProps = pageProps.locale;
