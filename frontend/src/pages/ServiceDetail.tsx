@@ -3,7 +3,6 @@ import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { useLocale } from '../context/LocaleContext';
 import { findSubService } from '../data/services';
 import { useLocalePath } from '../hooks/useLocalePath';
-import { formatCurrency, localizePriceLabel } from '../utils/currency';
 import { useMetaPageEvents } from '../hooks/useMetaPageEvents';
 import { trackMetaEvent } from '../utils/metaPixel';
 import { CallRequestPayload } from '../utils/callRequest';
@@ -55,8 +54,6 @@ const ServiceDetail = () => {
   const [addVfx, setAddVfx] = useState(false);
   const isReelsEditing = match?.subService.slug === 'reels-editing';
   const totalAmountInUSD = (match?.subService.priceInUSD ?? 0) + (isReelsEditing && addVfx ? REELS_VFX_ADD_ON_USD : 0);
-  const totalAmountLabel = formatCurrency(totalAmountInUSD);
-  const addOnLabel = formatCurrency(REELS_VFX_ADD_ON_USD);
   const metaEventValue = totalAmountInUSD;
   const metaEventCurrency = 'USD';
 
@@ -102,8 +99,6 @@ const ServiceDetail = () => {
   }
 
   const { category, subService } = match;
-  const localizedPriceLabel = localizePriceLabel(subService.priceLabel);
-  const localizedPriceNote = subService.priceNote ? localizePriceLabel(subService.priceNote) : null;
   const actionButtonLabel = 'Inquire Now';
   const isActionDisabled = isSubmitting;
   const formattedContactNumber = formatInternationalPhone(form.phoneCountry, form.contactNumber);
@@ -155,7 +150,6 @@ const ServiceDetail = () => {
       subServiceSlug,
       serviceName: subService.name,
       categoryName: category.name,
-      totalAmountLabel,
       addVfx: isReelsEditing ? (addVfx ? 'yes' : 'no') : undefined,
       contactNumber: formattedContactNumber,
       name: form.name,
@@ -290,10 +284,6 @@ const ServiceDetail = () => {
           <p>{subService.description}</p>
           <div className="detail-meta">
             <div>
-              <span className="meta-label">Investment</span>
-              <span className="meta-value">{localizedPriceLabel}</span>
-            </div>
-            <div>
               <span className="meta-label">Timeline</span>
               <span className="meta-value">{subService.deliveryTimeline.replace('Delivery: ', '')}</span>
             </div>
@@ -309,7 +299,6 @@ const ServiceDetail = () => {
                 <li key={item}>{item}</li>
               ))}
             </ul>
-            {localizedPriceNote && <p className="detail-note">{localizedPriceNote}</p>}
           </div>
           <div className="card detail-form-card">
             <h2>Inquire about this service</h2>
@@ -397,7 +386,7 @@ const ServiceDetail = () => {
                     checked={addVfx}
                     onChange={(event) => setAddVfx(event.currentTarget.checked)}
                   />
-                  <span>Add VFX (+{addOnLabel})</span>
+                  <span>Add VFX enhancement to the reel</span>
                 </label>
               )}
               <label className="checkbox">

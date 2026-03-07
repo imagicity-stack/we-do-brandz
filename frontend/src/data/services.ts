@@ -39,7 +39,7 @@ export const serviceCategories: ServiceCategory[] = [
           'Includes final files for print & digital use'
         ],
         deliveryTimeline: 'Delivery: 3–5 days',
-        priceLabel: '$36',
+        priceLabel: 'Custom quote',
         priceInUSD: 36
       },
       {
@@ -53,7 +53,7 @@ export const serviceCategories: ServiceCategory[] = [
           'Includes business card & social media display design'
         ],
         deliveryTimeline: 'Delivery: 7–10 days',
-        priceLabel: '$169',
+        priceLabel: 'Custom quote',
         priceInUSD: 169
       },
       {
@@ -67,7 +67,7 @@ export const serviceCategories: ServiceCategory[] = [
           'Updated logo + brand guidelines + rollout templates'
         ],
         deliveryTimeline: 'Delivery: 10–14 days',
-        priceLabel: '$193',
+        priceLabel: 'Custom quote',
         priceInUSD: 193
       },
       {
@@ -81,9 +81,9 @@ export const serviceCategories: ServiceCategory[] = [
           'Consistent look & feel across items'
         ],
         deliveryTimeline: 'Delivery: 2–4 days',
-        priceLabel: '$11 per set',
+        priceLabel: 'Custom quote',
         priceInUSD: 11,
-        priceNote: 'Pricing reflects each collateral set.'
+        priceNote: 'Final scope is aligned during discovery.',
       }
     ]
   },
@@ -106,9 +106,9 @@ export const serviceCategories: ServiceCategory[] = [
           'Basic performance tracking & reporting'
         ],
         deliveryTimeline: 'Delivery: Setup in 2–3 days',
-        priceLabel: '$72 (Ad spend extra)',
+        priceLabel: 'Custom quote',
         priceInUSD: 72,
-        priceNote: 'Ad spend billed separately.'
+        priceNote: 'Final scope is aligned during discovery.',
       },
       {
         id: 'google-ads-campaign',
@@ -121,9 +121,9 @@ export const serviceCategories: ServiceCategory[] = [
           'Weekly performance report'
         ],
         deliveryTimeline: 'Delivery: Setup in 2–4 days',
-        priceLabel: '$72 (Ad spend extra)',
+        priceLabel: 'Custom quote',
         priceInUSD: 72,
-        priceNote: 'Ad spend billed separately.'
+        priceNote: 'Final scope is aligned during discovery.',
       },
       {
         id: 'social-media-management',
@@ -136,9 +136,9 @@ export const serviceCategories: ServiceCategory[] = [
           'Monthly growth and strategy tracking'
         ],
         deliveryTimeline: 'Delivery: Monthly Ongoing',
-        priceLabel: '$157/month (depends on volume)',
+        priceLabel: 'Custom quote',
         priceInUSD: 157,
-        priceNote: 'Pricing may vary based on volume requirements.'
+        priceNote: 'Final scope is aligned during discovery.',
       },
       {
         id: 'social-media-strategy',
@@ -151,7 +151,7 @@ export const serviceCategories: ServiceCategory[] = [
           'Competitor & trend analysis'
         ],
         deliveryTimeline: 'Delivery: 5–7 days',
-        priceLabel: '$120',
+        priceLabel: 'Custom quote',
         priceInUSD: 120
       },
       {
@@ -165,9 +165,9 @@ export const serviceCategories: ServiceCategory[] = [
           'Ongoing optimization & weekly review'
         ],
         deliveryTimeline: 'Delivery: Monthly Ongoing',
-        priceLabel: '$349/month (Ads Spend Extra)',
+        priceLabel: 'Custom quote',
         priceInUSD: 349,
-        priceNote: 'Ad spend not included in the fee.'
+        priceNote: 'Final scope is aligned during discovery.',
       }
     ]
   },
@@ -190,7 +190,7 @@ export const serviceCategories: ServiceCategory[] = [
           'WhatsApp & call integration'
         ],
         deliveryTimeline: 'Delivery: 5–10 days',
-        priceLabel: '$181',
+        priceLabel: 'Custom quote',
         priceInUSD: 181
       },
       {
@@ -204,9 +204,9 @@ export const serviceCategories: ServiceCategory[] = [
           'Customer-friendly UI + training to operate'
         ],
         deliveryTimeline: 'Delivery: 15 days',
-        priceLabel: '$241 (platform varies)',
+        priceLabel: 'Custom quote',
         priceInUSD: 241,
-        priceNote: 'Platform choice may impact pricing.'
+        priceNote: 'Final scope is aligned during discovery.',
       },
       {
         id: 'website-mobile-app-package',
@@ -219,9 +219,9 @@ export const serviceCategories: ServiceCategory[] = [
           'App designed with brand identity UI'
         ],
         deliveryTimeline: 'Delivery: 30–35 days',
-        priceLabel: '$711',
+        priceLabel: 'Custom quote',
         priceInUSD: 711,
-        priceNote: 'Integrations may adjust final pricing.'
+        priceNote: 'Final scope is aligned during discovery.',
       },
       {
         id: 'landing-page',
@@ -234,7 +234,7 @@ export const serviceCategories: ServiceCategory[] = [
           'Optimized for ads'
         ],
         deliveryTimeline: 'Delivery: 3 days',
-        priceLabel: '$72',
+        priceLabel: 'Custom quote',
         priceInUSD: 72
       }
     ]
@@ -258,9 +258,9 @@ export const serviceCategories: ServiceCategory[] = [
           'Brand color, fonts, and logo integration'
         ],
         deliveryTimeline: 'Delivery: 3 days',
-        priceLabel: '$36 (per 10s video)',
+        priceLabel: 'Custom quote',
         priceInUSD: 36,
-        priceNote: 'Pricing for a 10 second ad spot.'
+        priceNote: 'Final scope is aligned during discovery.',
       },
       {
         id: 'face-cam-video',
@@ -273,7 +273,7 @@ export const serviceCategories: ServiceCategory[] = [
           'Suitable for reels/ads/YouTube shorts'
         ],
         deliveryTimeline: 'Delivery: 3–4 days per video',
-        priceLabel: '$48',
+        priceLabel: 'Custom quote',
         priceInUSD: 48
       },
       {
@@ -287,9 +287,9 @@ export const serviceCategories: ServiceCategory[] = [
           'Perfect for Instagram / Facebook growth'
         ],
         deliveryTimeline: 'Delivery: 2 days per video',
-        priceLabel: '$10 per reel (+$5 for VFX)',
+        priceLabel: 'Custom quote',
         priceInUSD: 10,
-        priceNote: 'Add $5 for VFX-enhanced edits.'
+        priceNote: 'Final scope is aligned during discovery.',
       }
     ]
   }
