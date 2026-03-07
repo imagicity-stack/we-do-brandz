@@ -15,9 +15,9 @@ export const faqs: FAQItem[] = [
       'Absolutely. Our team often bundles brand identity, web development, and ongoing marketing retainers so you have one integrated squad. We can structure retainers or project-based engagements.'
   },
   {
-    question: 'How does the payment process work?',
+    question: 'How does the onboarding process work?',
     answer:
-      'After you book a service, you will fill in your brand details. We generate a secure payment request so you can complete checkout, and you receive a confirmation receipt via email instantly.'
+      'After you submit your inquiry, our team shares a tailored execution plan, confirms scope, and sends your kickoff checklist with timeline details.'
   },
   {
     question: 'Do you work with startups and established enterprises?',
@@ -27,6 +27,6 @@ export const faqs: FAQItem[] = [
   {
     question: 'What happens after I make a booking?',
     answer:
-      'Once payment is confirmed, you receive an onboarding questionnaire and kickoff call invite within 24 hours. We then set up shared workspaces, finalize deliverable timelines, and get to work.'
+      'Once your project is approved, you receive an onboarding questionnaire and kickoff call invite within 24 hours. We then set up shared workspaces, finalize deliverable timelines, and get to work.'
   }
 ];

@@ -1,37 +1,37 @@
 .contact-hero {
-  padding: 5rem 0 3rem;
+  padding: 4.5rem 0 2.8rem;
 }
 
 .contact-hero-inner {
   display: grid;
-  gap: 2.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  grid-template-columns: 1fr 1fr;
   align-items: start;
 }
 
 .contact-hero h1 {
-  font-size: clamp(2.2rem, 4vw, 3.1rem);
-  margin-bottom: 1rem;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  margin-bottom: 0.8rem;
 }
 
 .contact-hero p {
-  max-width: 520px;
-  color: rgba(12, 27, 51, 0.72);
-  font-size: 1.05rem;
-  margin-bottom: 2rem;
+  color: var(--text-muted);
+  max-width: 560px;
+  margin-bottom: 1.35rem;
 }
 
 .contact-details {
   display: grid;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 .contact-details h3 {
-  font-size: 1rem;
-  margin-bottom: 0.35rem;
-  color: var(--brand-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
 }
 
-.contact-details p {
-  color: rgba(12, 27, 51, 0.7);
+.contact-details p { color: var(--text-muted); }
+
+@media (max-width: 900px) {
+  .contact-hero-inner { grid-template-columns: 1fr; }
 }

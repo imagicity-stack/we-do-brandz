@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import type { ServiceCategory, SubService } from '../data/services';
 import { useLocalePath } from '../hooks/useLocalePath';
-import { localizePriceLabel } from '../utils/currency';
 
 interface Props {
   category: ServiceCategory;
@@ -10,10 +9,9 @@ interface Props {
 
 export const SubServiceCard = ({ category, service }: Props) => {
   const buildPath = useLocalePath();
-  const localizedPrice = localizePriceLabel(service.priceLabel);
 
   return (
-    <div className="subservice-card">
+    <article className="subservice-card">
       <div className="subservice-content">
         <span className="tag">{category.name}</span>
         <h3>{service.name}</h3>
@@ -26,16 +24,12 @@ export const SubServiceCard = ({ category, service }: Props) => {
       </div>
 
       <div className="subservice-meta">
-        <div className="price-block">
-          <span className="price">{localizedPrice}</span>
-          <span className="timeline">{service.deliveryTimeline}</span>
-          {service.priceNote && <small>{localizePriceLabel(service.priceNote)}</small>}
-        </div>
+        <span className="timeline">{service.deliveryTimeline}</span>
         <Link href={buildPath(`/services/${category.slug}/${service.slug}`)} className="primary-button">
-          Book now
+          Discuss this service
         </Link>
       </div>
-    </div>
+    </article>
   );
 };
 

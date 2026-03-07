@@ -14,14 +14,12 @@ const navLinks = [
 
 export const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const buildPath = useLocalePath();
   const router = useRouter();
   const pathname = useMemo(() => router.asPath.split('?')[0], [router.asPath]);
 
   useEffect(() => {
     setIsNavOpen(false);
-    setIsSearchOpen(false);
   }, [pathname]);
 
   const isActive = (path: string) => pathname === buildPath(path) || pathname.startsWith(`${buildPath(path)}/`);
@@ -29,13 +27,14 @@ export const Header = () => {
   return (
     <header className="header">
       <div className="main-container header-inner">
+        <Link href={buildPath('/')} className="brand-mark" aria-label="We do Brandz home">
+          <strong>We do Brandz</strong>
+          <span>Strategy • Creative • Growth</span>
+        </Link>
+
         <nav className={`nav ${isNavOpen ? 'nav-open' : ''}`} aria-label="Primary">
           {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={buildPath(link.href)}
-              className={`nav-link ${isActive(link.href) ? 'active' : ''}`}
-            >
+            <Link key={link.href} href={buildPath(link.href)} className={`nav-link ${isActive(link.href) ? 'active' : ''}`}>
               {link.label}
             </Link>
           ))}
@@ -45,20 +44,9 @@ export const Header = () => {
         </nav>
 
         <div className="header-actions">
-          <div className={`search-desktop ${isSearchOpen ? 'open' : ''}`}>
-            <SearchBar onNavigate={() => setIsSearchOpen(false)} />
+          <div className="search-desktop">
+            <SearchBar />
           </div>
-          <button
-            type="button"
-            className={`search-toggle ${isSearchOpen ? 'open' : ''}`}
-            aria-label="Toggle search"
-            onClick={() => setIsSearchOpen((prev) => !prev)}
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="6" />
-              <line x1="15.5" y1="15.5" x2="21" y2="21" />
-            </svg>
-          </button>
           <button
             className={`mobile-toggle ${isNavOpen ? 'open' : ''}`}
             type="button"

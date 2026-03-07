@@ -27,7 +27,7 @@ const TermsAndConditions = () => {
       <ul>
         <li>All projects, packages, and deliverables are discussed and confirmed through written communication (email or signed proposal).</li>
         <li>Advance payments are mandatory to initiate any project.</li>
-        <li>Pricing is exclusive of applicable taxes unless stated otherwise.</li>
+        <li>Project scope and timeline details are finalized in writing before work begins.</li>
         <li>Delays in payment may result in project suspension or late fees.</li>
       </ul>
       <h2>3. Intellectual Property</h2>
