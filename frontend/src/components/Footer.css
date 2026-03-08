@@ -1,49 +1,45 @@
 .footer {
-  margin-top: 4rem;
-  background: linear-gradient(150deg, #0b1430, #111f49);
-  color: rgba(255, 255, 255, 0.88);
+  margin-top: 2rem;
+  border-top: 1px solid rgba(78, 94, 172, 0.2);
+  background: #0f1740;
+  color: #eef1ff;
 }
 
 .footer-inner {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 2rem;
-  padding: 3rem 0 2.2rem;
+  padding: 2rem 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
-.footer-brand p {
-  max-width: 560px;
-  color: rgba(255, 255, 255, 0.78);
-}
-
+.footer-brand h4,
 .footer-links h4 {
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.5rem;
 }
 
 .policy-links {
   display: grid;
-  gap: 0.55rem;
+  gap: 0.4rem;
 }
 
 .policy-links a {
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(238, 241, 255, 0.9);
 }
 
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
-  padding: 0.95rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .footer-bottom-inner {
+  min-height: 3.2rem;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  flex-wrap: wrap;
+  font-size: 0.88rem;
 }
 
-@media (max-width: 768px) {
-  .footer-inner {
-    grid-template-columns: 1fr;
-    padding: 2.5rem 0 1.9rem;
-  }
+.footer-tagline {
+  color: rgba(238, 241, 255, 0.7);
 }
