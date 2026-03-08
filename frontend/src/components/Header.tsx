@@ -1,8 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
-import SearchBar from './SearchBar';
-import { useLocalePath } from '../hooks/useLocalePath';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -14,7 +12,6 @@ const navLinks = [
 
 export const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const buildPath = useLocalePath();
   const router = useRouter();
   const pathname = useMemo(() => router.asPath.split('?')[0], [router.asPath]);
 
@@ -22,31 +19,29 @@ export const Header = () => {
     setIsNavOpen(false);
   }, [pathname]);
 
-  const isActive = (path: string) => pathname === buildPath(path) || pathname.startsWith(`${buildPath(path)}/`);
-
   return (
     <header className="header">
       <div className="main-container header-inner">
-        <Link href={buildPath('/')} className="brand-mark" aria-label="We do Brandz home">
-          <strong>We do Brandz</strong>
-          <span>Strategy • Creative • Growth</span>
+        <Link href="/" className="brand-mark" aria-label="We do Brandz home">
+          <span className="brand-orb" aria-hidden="true" />
+          <div>
+            <strong>We do Brandz</strong>
+            <span>Creative direction + digital craft</span>
+          </div>
         </Link>
 
         <nav className={`nav ${isNavOpen ? 'nav-open' : ''}`} aria-label="Primary">
           {navLinks.map((link) => (
-            <Link key={link.href} href={buildPath(link.href)} className={`nav-link ${isActive(link.href) ? 'active' : ''}`}>
+            <Link key={link.href} href={link.href} className={`nav-link ${pathname === link.href ? 'active' : ''}`}>
               {link.label}
             </Link>
           ))}
-          <div className="nav-search">
-            <SearchBar autoFocus onNavigate={() => setIsNavOpen(false)} />
-          </div>
         </nav>
 
         <div className="header-actions">
-          <div className="search-desktop">
-            <SearchBar />
-          </div>
+          <Link href="/contact" className="header-cta">
+            Start your project
+          </Link>
           <button
             className={`mobile-toggle ${isNavOpen ? 'open' : ''}`}
             type="button"

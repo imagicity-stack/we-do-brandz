@@ -1,16 +1,15 @@
-export type Locale = 'us';
+export type Locale = 'default';
 
-export const SUPPORTED_LOCALES: Locale[] = ['us'];
+export const SUPPORTED_LOCALES: Locale[] = ['default'];
 
-export const isLocale = (value?: string | null): value is Locale => value === 'us';
+export const isLocale = (value?: string | null): value is Locale => value === 'default';
 
-export const detectLocale = (): Locale => 'us';
+export const detectLocale = (): Locale => 'default';
 
-export const buildLocalePath = (locale: Locale, path = '/') => {
-  if (!path || path === '/' || path === '') {
-    return `/${locale}`;
+export const buildLocalePath = (_locale: Locale, path = '/') => {
+  if (!path || path === '') {
+    return '/';
   }
 
-  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
-  return `/${locale}${normalizedPath}`;
+  return path.startsWith('/') ? path : `/${path}`;
 };
