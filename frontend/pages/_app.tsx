@@ -7,7 +7,18 @@ import ScrollToTopButton from '../src/components/ScrollToTopButton';
 import { trackMetaEvent } from '../src/utils/metaPixel';
 
 import '../src/index.css';
+import '../src/components/Header.css';
+import '../src/components/Footer.css';
 import '../src/pages/Home.css';
+import '../src/components/ContactForm.css';
+import '../src/components/ServiceCarousel.css';
+import '../src/components/SubServiceCard.css';
+import '../src/pages/About.css';
+import '../src/pages/Contact.css';
+import '../src/pages/FAQ.css';
+import '../src/pages/ServiceDetail.css';
+import '../src/pages/Services.css';
+import '../src/pages/PolicyPage.css';
 
 const MetaPixelTracker = () => {
   const router = useRouter();

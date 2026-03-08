@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
 
@@ -7,6 +9,14 @@ export const Footer = () => {
         <div className="footer-brand">
           <h4>We do Brandz</h4>
           <p>Beautiful strategy, sharp storytelling, and growth systems designed for bold brands.</p>
+        </div>
+        <div className="footer-links">
+          <h4>Explore</h4>
+          <div className="policy-links">
+            <Link href="/services">Services</Link>
+            <Link href="/about">About</Link>
+            <Link href="/contact">Contact</Link>
+          </div>
         </div>
         <div className="footer-links">
           <h4>Connect</h4>
