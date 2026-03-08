@@ -3,10 +3,11 @@ import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 
 const navLinks = [
-  { href: '/#services', label: 'Services' },
-  { href: '/#process', label: 'Process' },
-  { href: '/#work', label: 'Work' },
-  { href: '/#contact', label: 'Contact' }
+  { href: '/', label: 'Home' },
+  { href: '/services', label: 'Services' },
+  { href: '/about', label: 'About' },
+  { href: '/faq', label: 'FAQ' },
+  { href: '/contact', label: 'Contact' }
 ];
 
 export const Header = () => {
@@ -31,16 +32,16 @@ export const Header = () => {
 
         <nav className={`nav ${isNavOpen ? 'nav-open' : ''}`} aria-label="Primary">
           {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} className="nav-link">
+            <Link key={link.href} href={link.href} className={`nav-link ${pathname === link.href ? 'active' : ''}`}>
               {link.label}
             </Link>
           ))}
         </nav>
 
         <div className="header-actions">
-          <a href="mailto:connect@wedobrandz.com" className="header-mail-link">
-            connect@wedobrandz.com
-          </a>
+          <Link href="/contact" className="header-cta">
+            Start your project
+          </Link>
           <button
             className={`mobile-toggle ${isNavOpen ? 'open' : ''}`}
             type="button"
