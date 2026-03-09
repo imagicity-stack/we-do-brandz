@@ -1,8 +1,11 @@
-import { useMemo } from 'react';
-import { useLocale } from '../context/LocaleContext';
-import { buildLocalePath } from '../utils/locale';
+import { useCallback } from 'react';
 
 export const useLocalePath = () => {
-  const locale = useLocale();
-  return useMemo(() => (path = '/') => buildLocalePath(locale, path), [locale]);
+  return useCallback((path = '/') => {
+    if (!path || path === '') {
+      return '/';
+    }
+
+    return path.startsWith('/') ? path : `/${path}`;
+  }, []);
 };
