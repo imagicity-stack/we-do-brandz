@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -19,41 +18,38 @@ export const Header = () => {
   }, [pathname]);
 
   const isActive = (href: string) => {
-    if (href === '/') {
-      return pathname === '/';
-    }
-
+    if (href === '/') return pathname === '/';
     return pathname === href || pathname.startsWith(`${href}/`);
   };
 
   return (
     <header className="header">
       <div className="main-container header-inner">
-        <Link href="/" className="brand-mark" aria-label="We do Brandz home" onClick={() => setIsNavOpen(false)}>
+        <a href="/" className="brand-mark" aria-label="We do Brandz home" onClick={() => setIsNavOpen(false)}>
           <span className="brand-orb" aria-hidden="true" />
           <div>
             <strong>We do Brandz</strong>
             <span>Creative direction + digital craft</span>
           </div>
-        </Link>
+        </a>
 
         <nav className={`nav ${isNavOpen ? 'nav-open' : ''}`} aria-label="Primary">
           {navLinks.map((link) => (
-            <Link
+            <a
               key={link.href}
               href={link.href}
               className={`nav-link ${isActive(link.href) ? 'active' : ''}`}
               onClick={() => setIsNavOpen(false)}
             >
               {link.label}
-            </Link>
+            </a>
           ))}
         </nav>
 
         <div className="header-actions">
-          <Link href="/contact" className="header-cta" onClick={() => setIsNavOpen(false)}>
+          <a href="/contact" className="header-cta" onClick={() => setIsNavOpen(false)}>
             Start your project
-          </Link>
+          </a>
           <button
             className={`mobile-toggle ${isNavOpen ? 'open' : ''}`}
             type="button"
