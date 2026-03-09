@@ -1,7 +1,51 @@
+import { FormEvent, useState } from 'react';
 import { useMetaPageEvents } from '../hooks/useMetaPageEvents';
+
+interface ContactFormState {
+  name: string;
+  email: string;
+  message: string;
+}
+
+const initialFormState: ContactFormState = {
+  name: '',
+  email: '',
+  message: ''
+};
 
 const Contact = () => {
   useMetaPageEvents('Contact', { params: { content_category: 'Contact' } });
+  const [formState, setFormState] = useState<ContactFormState>(initialFormState);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    setSubmitStatus('submitting');
+
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          formType: 'contact',
+          name: formState.name,
+          email: formState.email,
+          message: formState.message
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Unable to submit right now.');
+      }
+
+      setFormState(initialFormState);
+      setSubmitStatus('success');
+    } catch (error) {
+      setSubmitStatus('error');
+    }
+  };
 
   return (
     <main className="contact-page">
@@ -11,8 +55,8 @@ const Contact = () => {
             <span className="tag">Contact Us</span>
             <h1>Let&apos;s talk about what you&apos;re building</h1>
             <p>
-              Share your goals over email and our team will get back within 24 hours with recommendations tailored to your
-              brand and growth stage.
+              Share your requirements using the contact form and our team will get back within 24 hours with recommendations
+              tailored to your brand and growth stage.
             </p>
             <div className="contact-details">
               <div>
@@ -26,20 +70,54 @@ const Contact = () => {
                 <p>Within 24 business hours</p>
               </div>
             </div>
-            <div className="form-actions" style={{ marginTop: '1rem' }}>
-              <a href="mailto:connect@wedobrandz.com" className="primary-button">
-                Email our team
-              </a>
-            </div>
+            <form className="contact-form" style={{ marginTop: '1.25rem' }} onSubmit={handleSubmit}>
+              <label>
+                Full Name
+                <input
+                  name="name"
+                  required
+                  value={formState.name}
+                  onChange={(event) => setFormState((prev) => ({ ...prev, name: event.target.value }))}
+                />
+              </label>
+              <label>
+                Email Address
+                <input
+                  name="email"
+                  type="email"
+                  required
+                  value={formState.email}
+                  onChange={(event) => setFormState((prev) => ({ ...prev, email: event.target.value }))}
+                />
+              </label>
+              <label>
+                Message
+                <textarea
+                  name="message"
+                  rows={4}
+                  required
+                  value={formState.message}
+                  onChange={(event) => setFormState((prev) => ({ ...prev, message: event.target.value }))}
+                />
+              </label>
+              <div className="form-actions">
+                <button className="primary-button" type="submit" disabled={submitStatus === 'submitting'}>
+                  {submitStatus === 'submitting' ? 'Submitting…' : 'Submit'}
+                </button>
+              </div>
+              {submitStatus === 'success' && <p className="form-success">Thank you! We&apos;ll contact you soon.</p>}
+              {submitStatus === 'error' && <p className="form-error">Unable to send right now. Please email us directly.</p>}
+            </form>
           </div>
           <div className="card">
-            <h3>What to include in your email</h3>
-            <ul style={{ marginTop: '0.8rem', paddingLeft: '1rem', color: 'var(--text-muted)' }}>
-              <li>Your brand/business name</li>
-              <li>Service(s) you need</li>
-              <li>Expected timeline</li>
-              <li>Any references or requirements</li>
-            </ul>
+            <h3>Business information</h3>
+            <p style={{ marginTop: '0.8rem', color: 'var(--text-muted)' }}>
+              We do Brandz operates under <strong>IMAGICITY</strong>, a proprietorship firm in India, run by Dewesh Karan.
+            </p>
+            <p style={{ marginTop: '0.8rem', color: 'var(--text-muted)' }}>
+              Address: Kolghatti, Near Black Water Tank, Reformatory School, Hazaribagh, Jharkhand, 825301, India.
+            </p>
+            <p style={{ marginTop: '0.8rem', color: 'var(--text-muted)' }}>Registered GST Number: 20JVPPK2424H1ZM</p>
           </div>
         </div>
       </section>
