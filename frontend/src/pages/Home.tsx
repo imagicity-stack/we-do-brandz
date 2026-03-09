@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 const Home = () => {
   return (
     <main>
@@ -9,12 +11,12 @@ const Home = () => {
             We help founders and teams turn ideas into premium digital experiences with a clear story and measurable outcomes.
           </p>
           <div className="showcase-actions">
-            <a href="#contact" className="primary-button">
+            <Link href="/contact" className="primary-button">
               Let&apos;s build together
-            </a>
-            <a href="#work" className="secondary-button">
-              View sample outcomes
-            </a>
+            </Link>
+            <Link href="/services" className="secondary-button">
+              Explore services
+            </Link>
           </div>
           <div className="showcase-metrics">
             <article>
