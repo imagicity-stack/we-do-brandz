@@ -2,11 +2,10 @@ import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 
 const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/services', label: 'Services' },
-  { href: '/about', label: 'About' },
-  { href: '/faq', label: 'FAQ' },
-  { href: '/contact', label: 'Contact' }
+  { href: '/#services', label: 'Services' },
+  { href: '/#process', label: 'Process' },
+  { href: '/#work', label: 'Work' },
+  { href: '/#contact', label: 'Contact' }
 ];
 
 export const Header = () => {
