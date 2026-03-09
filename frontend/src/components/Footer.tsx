@@ -19,6 +19,14 @@ export const Footer = () => {
           </div>
         </div>
         <div className="footer-links">
+          <h4>Explore</h4>
+          <div className="policy-links">
+            <Link href="/privacy-policy">Privacy Policy</Link>
+            <Link href="/terms-and-conditions">Terms & Conditions</Link>
+            <Link href="/refund-and-return-policy">Refund Policy</Link>
+          </div>
+        </div>
+        <div className="footer-links">
           <h4>Connect</h4>
           <div className="policy-links">
             <a href="mailto:connect@wedobrandz.com">connect@wedobrandz.com</a>
