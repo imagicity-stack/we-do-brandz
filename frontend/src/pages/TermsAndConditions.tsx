@@ -15,6 +15,13 @@ const TermsAndConditions = () => {
         Welcome to We Do Brandz, a creative marketing and design agency under IMAGICITY. By accessing or using our website and
         services, you agree to the following Terms and Conditions. Please read them carefully before proceeding.
       </p>
+
+      <h2>Business Entity Information</h2>
+      <p>
+        We do Brandz operates under <strong>IMAGICITY</strong>, a proprietorship firm in India, run by Dewesh Karan.
+      </p>
+      <p>Registered Address: Kolghatti, Near Black Water Tank, Reformatory School, Hazaribagh, Jharkhand, 825301, India.</p>
+      <p>Registered GST Number: 20JVPPK2424H1ZM</p>
       <h2>1. Use of Website</h2>
       <p>You agree to use this website for lawful purposes only. You must not:</p>
       <ul>

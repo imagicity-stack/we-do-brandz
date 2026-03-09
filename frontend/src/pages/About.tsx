@@ -15,8 +15,9 @@ const About = () => {
             share.
           </p>
           <p>
-            We Do Brandz is a part of Imagicity (an India-based startup marketing agency), and We Do Brandz is built to serve
-            people across the globe.
+            We do Brandz operates under <strong>IMAGICITY</strong>, a proprietorship firm in India, run by Dewesh Karan.
+            Registered office: Kolghatti, Near Black Water Tank, Reformatory School, Hazaribagh, Jharkhand, 825301, India.
+            Registered GST Number: 20JVPPK2424H1ZM.
           </p>
         </div>
       </section>

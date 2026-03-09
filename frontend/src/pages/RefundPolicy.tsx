@@ -16,6 +16,13 @@ const RefundPolicy = () => {
         Since our services are custom-built to meet each client’s unique needs, our refund terms are structured to ensure
         fairness for both sides.
       </p>
+
+      <h2>Business Entity Information</h2>
+      <p>
+        We do Brandz operates under <strong>IMAGICITY</strong>, a proprietorship firm in India, run by Dewesh Karan.
+      </p>
+      <p>Registered Address: Kolghatti, Near Black Water Tank, Reformatory School, Hazaribagh, Jharkhand, 825301, India.</p>
+      <p>Registered GST Number: 20JVPPK2424H1ZM</p>
       <h2>1. Project Initiation</h2>
       <p>
         A project officially begins after receiving the advance payment and written confirmation from the client. Once a

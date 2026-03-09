@@ -15,7 +15,14 @@ const PrivacyPolicy = () => {
           We Do Brandz (“we,” “our,” or “us”) is committed to protecting your privacy. This Privacy Policy explains how we
           collect, use, and safeguard your information when you visit our website or engage our services.
         </p>
-        <h2>1. Information We Collect</h2>
+  
+      <h2>Business Entity Information</h2>
+      <p>
+        We do Brandz operates under <strong>IMAGICITY</strong>, a proprietorship firm in India, run by Dewesh Karan.
+      </p>
+      <p>Registered Address: Kolghatti, Near Black Water Tank, Reformatory School, Hazaribagh, Jharkhand, 825301, India.</p>
+      <p>Registered GST Number: 20JVPPK2424H1ZM</p>
+      <h2>1. Information We Collect</h2>
         <p>We may collect personal and non-personal information when you:</p>
         <ul>
           <li>Fill out forms or request services on our website.</li>
