@@ -18,10 +18,18 @@ export const Header = () => {
     setIsNavOpen(false);
   }, [pathname]);
 
+  const isActive = (href: string) => {
+    if (href === '/') {
+      return pathname === '/';
+    }
+
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
+
   return (
     <header className="header">
       <div className="main-container header-inner">
-        <Link href="/" className="brand-mark" aria-label="We do Brandz home">
+        <Link href="/" className="brand-mark" aria-label="We do Brandz home" onClick={() => setIsNavOpen(false)}>
           <span className="brand-orb" aria-hidden="true" />
           <div>
             <strong>We do Brandz</strong>
@@ -31,20 +39,26 @@ export const Header = () => {
 
         <nav className={`nav ${isNavOpen ? 'nav-open' : ''}`} aria-label="Primary">
           {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} className={`nav-link ${pathname === link.href ? 'active' : ''}`}>
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`nav-link ${isActive(link.href) ? 'active' : ''}`}
+              onClick={() => setIsNavOpen(false)}
+            >
               {link.label}
             </Link>
           ))}
         </nav>
 
         <div className="header-actions">
-          <Link href="/contact" className="header-cta">
+          <Link href="/contact" className="header-cta" onClick={() => setIsNavOpen(false)}>
             Start your project
           </Link>
           <button
             className={`mobile-toggle ${isNavOpen ? 'open' : ''}`}
             type="button"
             aria-label="Toggle navigation"
+            aria-expanded={isNavOpen}
             onClick={() => setIsNavOpen((prev) => !prev)}
           >
             <span />
