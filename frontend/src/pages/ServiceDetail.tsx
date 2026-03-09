@@ -5,7 +5,6 @@ import { findSubService } from '../data/services';
 import { useLocalePath } from '../hooks/useLocalePath';
 import { useMetaPageEvents } from '../hooks/useMetaPageEvents';
 import { trackMetaEvent } from '../utils/metaPixel';
-import { CallRequestPayload } from '../utils/callRequest';
 import { getBasicValidationError } from '../utils/formValidation';
 import { formatInternationalPhone, PHONE_COUNTRY_OPTIONS } from '../utils/phone';
 
@@ -47,9 +46,7 @@ const ServiceDetail = () => {
   const [form, setForm] = useState<BookingFormState>(initialFormState);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [callError, setCallError] = useState<string | null>(null);
-  const [callSuccess, setCallSuccess] = useState<string | null>(null);
-  const [submittingAction, setSubmittingAction] = useState<null | 'email' | 'call'>(null);
+  const [submittingAction, setSubmittingAction] = useState<null | 'email'>(null);
   const isSubmitting = submittingAction !== null;
   const [addVfx, setAddVfx] = useState(false);
   const isReelsEditing = match?.subService.slug === 'reels-editing';
@@ -118,17 +115,6 @@ const ServiceDetail = () => {
     }));
   };
 
-  const buildCallPayload = (): CallRequestPayload => ({
-    name: form.name,
-    phone: formattedContactNumber,
-    email: form.email,
-    category: category?.name ?? 'General',
-    sub_category: subService?.name ?? 'General',
-    message: form.message,
-    form_source: 'Website Service Form',
-    page_url: window.location.href
-  });
-
   const validateForm = () => {
     const basicError = getBasicValidationError(form.name, form.contactNumber, form.phoneCountry, form.email);
     if (basicError) {
@@ -188,8 +174,6 @@ const ServiceDetail = () => {
     event.preventDefault();
     setError(null);
     setSuccess(null);
-    setCallError(null);
-    setCallSuccess(null);
 
     const validationError = validateForm();
     if (validationError) {
@@ -223,53 +207,6 @@ const ServiceDetail = () => {
       setForm(initialFormState);
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Unexpected error occurred.');
-    } finally {
-      setSubmittingAction(null);
-    }
-  };
-
-  const handleCallRequest = async () => {
-    setError(null);
-    setSuccess(null);
-    setCallError(null);
-    setCallSuccess(null);
-
-    const validationError = validateForm();
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
-
-    const webhookUrl = process.env.NEXT_PUBLIC_N8N_WEBHOOK_GET_CALL_URL;
-    if (!webhookUrl) {
-      setCallError('Unable to request a call right now. Please try again.');
-      return;
-    }
-
-    setSubmittingAction('call');
-
-    try {
-      const response = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(buildCallPayload())
-      });
-
-      if (!response.ok) {
-        throw new Error('Unable to request a call right now. Please try again.');
-      }
-
-      setCallSuccess('Thank you. We will call you shortly.');
-      setForm(initialFormState);
-      setAddVfx(false);
-    } catch (submitError) {
-      setCallError(
-        submitError instanceof Error
-          ? submitError.message
-          : 'Unable to request a call right now. Please try again.'
-      );
     } finally {
       setSubmittingAction(null);
     }
@@ -413,13 +350,8 @@ const ServiceDetail = () => {
                 <button className="primary-button" type="submit" disabled={isActionDisabled}>
                   {submittingAction === 'email' ? 'Processing…' : actionButtonLabel}
                 </button>
-                <button className="secondary-button" type="button" onClick={handleCallRequest} disabled={isActionDisabled}>
-                  {submittingAction === 'call' ? 'Requesting…' : 'Get a CALL'}
-                </button>
               </div>
               {success && <p className="form-success">{success}</p>}
-              {callError && <p className="form-error">{callError}</p>}
-              {callSuccess && <p className="form-success">{callSuccess}</p>}
             </form>
           </div>
         </div>
